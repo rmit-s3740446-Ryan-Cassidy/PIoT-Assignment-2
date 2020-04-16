@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "/Users/vineet/Documents/iot/Assignment2/venv/bin/python3",
+    "python.formatting.provider": "black"
+}
