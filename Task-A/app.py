@@ -25,5 +25,11 @@ def login():
     return render_template("login.html", title="Login", form=form)
 
 
+@app.route("/dashboard")
+def dashboard():
+    form = LoginForm()
+    return render_template("dashboard.html", title="Dashboard")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
