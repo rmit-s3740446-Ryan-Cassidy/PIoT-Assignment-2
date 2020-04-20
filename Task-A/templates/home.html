@@ -1,0 +1,44 @@
+<body
+  style="background-image: url(https://images.unsplash.com/photo-1545044846-351ba102b6d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80);
+        background-repeat: no-repeat;
+        background-size: cover;"
+>
+  {% extends "layout.html" %} {%block content%}
+  <div
+    style="
+       width: 200px;
+       height:120px;
+       position: absolute;
+       left: 50%;
+       top: 50%;
+       transform: translate(-50%, -50%);"
+  >
+    <div class="text-center">
+      <button
+        type="button"
+        class="btn btn-light"
+        style="width: 200px;height: 50px;"
+      >
+        <a
+          href="/login"
+          style="text-decoration:none;outline: none;color: black;"
+          >Login</a
+        >
+      </button>
+    </div>
+    <div class="text-center">
+      <button
+        type="button"
+        class="btn btn-light"
+        style="margin-top: 20px;width: 200px;height: 50px;"
+      >
+        <a
+          href="/register"
+          style="text-decoration:none;outline: none;color: black;"
+          >Register</a
+        >
+      </button>
+    </div>
+  </div>
+  {%endblock content%}
+</body>
