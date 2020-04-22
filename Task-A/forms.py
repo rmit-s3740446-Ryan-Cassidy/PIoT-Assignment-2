@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms.fields.html5 import DateField, TimeField
 
 
 class RegistrationForm(FlaskForm):
@@ -23,4 +24,11 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
     remember = BooleanField("Remember Me")
     submit = SubmitField("Login")
+
+class BookingForm(FlaskForm):
+    pickup_date = DateField('Enter pick up date', format='%Y-%m-%d')
+    pickup_time = TimeField('Enter pick up time', format='%H:%M')
+    return_date = DateField('Enter return date', format='%Y-%m-%d')
+    return_time = TimeField('Enter return time', format='%H:%M')
+    submit = SubmitField("Submit")
 

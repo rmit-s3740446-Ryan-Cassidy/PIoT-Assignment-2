@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, LoginForm, BookingForm
 import sys
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
@@ -109,6 +109,11 @@ def dashboard():
 @app.route("/booking", methods=['GET', 'POST'])
 def booking():
     return render_template("booking.html", cars = cars)
+
+@app.route("/bookingDetails", methods=['GET', 'POST'])
+def bookingDetails():
+    form = BookingForm()
+    return render_template("bookingDetails.html", form=form)
 
 if __name__ == "__main__":
     app.run(debug=True)
