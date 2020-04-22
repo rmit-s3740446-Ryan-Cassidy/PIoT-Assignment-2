@@ -94,7 +94,7 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
+        if form.email.data == 'admin@blog.com' and form.password.data == 'p':
             return redirect(url_for('dashboard'))
         else:
             flash('Login Unsuccessful. Please check username and password',
@@ -106,6 +106,9 @@ def login():
 def dashboard():
     return render_template("dashboard.html", title="Dashboard")
 
+@app.route("/booking", methods=['GET', 'POST'])
+def booking():
+    return render_template("booking.html", cars = cars)
 
 if __name__ == "__main__":
     app.run(debug=True)
