@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import RegistrationForm, LoginForm
+from passlib.hash import sha256_crypt
 import sys
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
@@ -94,7 +95,9 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
+        email = form.email.data
+        hashedPassword = sha256_crypt.hash("password")
+        if email == 'admin@blog.com' and sha256_crypt.verify(form.password.data, hashedPassword):
             return redirect(url_for('dashboard'))
         else:
             flash('Login Unsuccessful. Please check username and password',
