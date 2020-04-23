@@ -1,0 +1,24 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container">
+  <div class="row">
+    {% for car in cars %}
+    <div class="col-lg-4">
+      <div class="card mt-2" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{car.make}}</h5>
+          <p class="card-text">
+            <i class="fas fa-car"></i>: {{car.type}}
+            <i class="fas fa-male ml-2"></i> : {{car.seats}}
+          </p>
+          <p class="card-text mt-0">
+            <i class="fas fa-map-marker-alt"></i>: {{car.location}}
+            <i class="fas fa-dollar-sign ml-2"></i>: {{car.costPerHour}} /hr
+          </p>
+          <a href={{ url_for('bookingDetails', carId = car.id) }} class="btn btn-outline-info text-center">Book Now</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endblock content %}
+</div>

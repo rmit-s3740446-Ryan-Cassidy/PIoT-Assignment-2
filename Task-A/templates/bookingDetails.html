@@ -1,0 +1,65 @@
+{% extends "layout.html" %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-4">
+    <form method="POST" action="">
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+        <legend class="mb-4">Enter booking details</legend>
+        <div class="form-group">
+          {{ form.pickup_date.label(class="form-control-label") }} {% if
+          form.pickup_date.errors %} {{ form.pickup_date(class="form-control
+          form-control is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.pickup_date.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %} {{ form.pickup_date(class="form-control form-control") }} {%
+          endif %}
+        </div>
+        <div class="form-group">
+          {{ form.pickup_time.label(class="form-control-label") }} {% if
+          form.pickup_time.errors %} {{ form.pickup_time(class="form-control
+          form-control is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.pickup_time.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %} {{ form.pickup_time(class="form-control form-control") }} {%
+          endif %}
+        </div>
+        <div class="form-group">
+          {{ form.return_date.label(class="form-control-label") }} {% if
+          form.return_date.errors %} {{ form.return_date(class="form-control
+          form-control is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.return_date.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %} {{ form.return_date(class="form-control form-control") }} {%
+          endif %}
+        </div>
+        <div class="form-group">
+          {{ form.return_time.label(class="form-control-label") }} {% if
+          form.return_time.errors %} {{ form.return_time(class="form-control
+          form-control is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.return_time.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %} {{ form.return_time(class="form-control form-control") }} {%
+          endif %}
+        </div>
+      </fieldset>
+      <div class="form-group">
+        {{ form.submit(class="btn btn-outline-info") }}
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}
+

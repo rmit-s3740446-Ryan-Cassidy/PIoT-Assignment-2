@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, LoginForm, BookingForm
 from passlib.hash import sha256_crypt
 import sys
 app = Flask(__name__)
@@ -109,6 +109,15 @@ def login():
 def dashboard():
     return render_template("dashboard.html", title="Dashboard")
 
+@app.route("/booking", methods=['GET', 'POST'])
+def booking():
+    return render_template("booking.html", cars = cars)
+
+@app.route("/bookingDetails/<carId>", methods=['GET', 'POST'])
+def bookingDetails(carId):
+    form = BookingForm()
+    print(carId)
+    return render_template("bookingDetails.html", form=form)
 
 if __name__ == "__main__":
     app.run(debug=True)
