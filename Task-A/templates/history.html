@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+  {% for booking in bookings %}
+    <article class="media content-section">
+        <div class="media-body">
+            <h5 style="text-align:left; float:left;">Booking ID: {{ booking.id }}</h5>
+            <h5 style="text-align:right;float:right;">Total Cost: {{ booking.totalCost }}</h5>
+            <hr style="clear:both;"/>
+          <p>
+            <ul class="list-group">
+                <li class="list-group-item">Pick-Up Date: {{ booking.pickUpDate }}</li>
+                <li class="list-group-item">Pick-Up Time: {{ booking.pickUpTime }}</li>
+                <li class="list-group-item">Return Date: {{ booking.returnDate }}</li>
+                <li class="list-group-item">Return Time: {{ booking.returnTime }}</li>
+            </ul>
+        </p>
+        </div>
+    </article>
+  {% endfor %}
+{% endblock content %}

@@ -71,6 +71,40 @@ cars = [
     },
 ]
 
+bookings = [
+
+    {
+        'id': '1',
+        'bookingDate': '1/04/2020',
+        'pickUpDate': '5/04/2020',
+        'pickUpTime': '14:30',
+        'returnDate': '5/04/2020',
+        'returnTime': '16:30',
+        'totalCost': '$40',
+        'carId' : '1'
+    },
+    {
+        'id': '2',
+        'bookingDate': '4/04/2020',
+        'pickUpDate': '6/04/2020',
+        'pickUpTime': '01:30',
+        'returnDate': '6/04/2020',
+        'returnTime': '07:00',
+        'totalCost': '$110',
+        'carId' : '2'
+    },
+    {
+        'id': '3',
+        'bookingDate': '20/04/2020',
+        'pickUpDate': '25/04/2020',
+        'pickUpTime': '10:30',
+        'returnDate': '25/04/2020',
+        'returnTime': '11:30',
+        'totalCost': '$20',
+        'carId' : '3'
+    }
+]
+
 
 @app.route("/")
 @app.route("/home")
@@ -118,6 +152,10 @@ def bookingDetails(carId):
     form = BookingForm()
     print(carId)
     return render_template("bookingDetails.html", form=form)
+
+@app.route("/history", methods=['GET'])
+def history():
+    return render_template("history.html", bookings = bookings)
 
 if __name__ == "__main__":
     app.run(debug=True)
