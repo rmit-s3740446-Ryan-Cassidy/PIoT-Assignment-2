@@ -110,9 +110,10 @@ def dashboard():
 def booking():
     return render_template("booking.html", cars = cars)
 
-@app.route("/bookingDetails", methods=['GET', 'POST'])
-def bookingDetails():
+@app.route("/bookingDetails/<carId>", methods=['GET', 'POST'])
+def bookingDetails(carId):
     form = BookingForm()
+    print(carId)
     return render_template("bookingDetails.html", form=form)
 
 if __name__ == "__main__":
