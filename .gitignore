@@ -1,2 +1,2 @@
-Task-A/venv/
-venv/
+Task-A/venv/*
+venv/*
