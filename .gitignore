@@ -1,2 +1,4 @@
 Task-A/venv/*
 venv/*
+venv/bin/
+venv/lib/
