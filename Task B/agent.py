@@ -24,6 +24,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     print("1. User Credentials")
     print("2. Facial Recognition")
     print("Select authentication method: ")
+# User Credential Login
+# Facial Recognition Login
 # Send authentication attempt to Master
 # If true, sign in, else ask user again
 # On sign in, send new car status to Master
