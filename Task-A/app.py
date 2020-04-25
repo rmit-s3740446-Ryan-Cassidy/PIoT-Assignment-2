@@ -83,12 +83,14 @@ def home():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        print(form.username.data)
-        print(form.lastname.data)
-        print(form.email.data)
-        print(form.password.data)
-        flash(f"Account created for {form.username.data}!", "success")
-        return redirect(url_for("register"))
+        userRegistrationData = {"firstname":form.firstname.data, "lastname":form.lastname.data, "username":form.username.data, "email":form.email.data, "password":sha256_crypt.hash(form.password.data)}
+        response = requests.post("http://127.0.0.1:5000/registerUser", json=userRegistrationData)
+        data = json.loads(response.text)
+        if data['message'] == 'Success':
+            print('success')
+            flash(f"Account created for {form.username.data}!", "success")
+        else:
+            flash(data['message'], "warning")
     return render_template("register.html", title="Register", form=form)
 
 

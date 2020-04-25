@@ -30,6 +30,23 @@ class Car(db.Model):
         self.Seats = Seats
         self.CostPerHour = CostPerHour
 
+class User(db.Model):
+    __tablename__ = "User"
+    UserID = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    FirstName = db.Column(db.Text)
+    LastName = db.Column(db.Text)
+    UserName = db.Column(db.Text)
+    Email = db.Column(db.Text)
+    Role = db.Column(db.Text)
+
+    def __init__(self, FirstName,LastName,UserName,Email,Role,UserID = None):
+        self.UserID = UserID
+        self.FirstName = FirstName
+        self.LastName = LastName
+        self.UserName = UserName
+        self.Email = Email
+        self.Role = Role
+
 class CarSchema(ma.Schema):
     def __init__(self, **kwargs):
         super().__init__( **kwargs)
@@ -40,11 +57,53 @@ class CarSchema(ma.Schema):
 carsSchema = CarSchema()
 carsSchema = CarSchema(many = True)
 
+class UserSchema(ma.Schema):
+    def __init__(self, **kwargs):
+        super().__init__( **kwargs)
+    
+    class Meta:
+        fields = ("UserID","FirstName","LastName","UserName","Email","Role")
+
+usersSchema = UserSchema()
+usersSchema = UserSchema(many = True)
+
 @api.route("/car", methods = ["GET"])
 def getCars():
     cars = Car.query.all()
     result = carsSchema.dump(cars)
     print(result)
     return jsonify(result)
+
+@api.route("/users", methods = ["GET"])
+def getUsers():
+    users = User.query.all()
+    result = usersSchema.dump(users)
+    print(result)
+    return jsonify(result)
+
+# Endpoint to create new user.
+@api.route("/registerUser", methods=["GET", "POST"])
+def addUser():
+    data = request.get_json(force=True)
+    print(data)
+    print(data['password'])
+    userWithSameUsername = User.query.filter_by(UserName=data['username']).first()
+    userWithSameEmail = User.query.filter_by(Email=data['email']).first()
+    print(userWithSameUsername)
+    if userWithSameEmail:
+        return jsonify({"message":"This email is already registered with another account"})
+    if userWithSameUsername:
+        return jsonify({"message":"This username is already taken"})
+   
+    firstname = request.json["firstname"]
+    lastname = request.json["lastname"]
+    username = request.json["username"]
+    email = request.json["email"]
+
+    newUser = User(FirstName = firstname,LastName = lastname,UserName = username,Email = email,Role="Customer")
+
+    db.session.add(newUser)
+    db.session.commit()
+    return jsonify({"message":"Success"})
 
 

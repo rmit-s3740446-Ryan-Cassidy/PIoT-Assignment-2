@@ -5,11 +5,14 @@ from wtforms.fields.html5 import DateField, TimeField
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField(
-        "Username", validators=[DataRequired(), Length(min=2, max=20)]
+    firstname = StringField(
+        "First name", validators=[DataRequired(), Length(min=2, max=20)]
     )
     lastname = StringField(
-        "Lastname", validators=[DataRequired(), Length(min=2, max=20)]
+        "Last name", validators=[DataRequired(), Length(min=2, max=20)]
+    )
+    username = StringField(
+        "User name", validators=[DataRequired(), Length(min=2, max=20)]
     )
     email = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired()])
