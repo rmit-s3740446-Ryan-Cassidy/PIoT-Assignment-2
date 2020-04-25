@@ -1,10 +1,12 @@
-from flask import Flask, render_template, url_for, flash, redirect
+from flask import Flask, render_template, url_for, flash, redirect, Blueprint, request, jsonify
 from forms import RegistrationForm, LoginForm, BookingForm
 from passlib.hash import sha256_crypt
 import sys
-app = Flask(__name__)
-app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
+import os, requests, json
 
+site = Blueprint("site", __name__)
 cars = [
     {
         'id': '1',
@@ -71,14 +73,13 @@ cars = [
     },
 ]
 
-
-@app.route("/")
-@app.route("/home")
+@site.route("/")
+@site.route("/home")
 def home():
     return render_template("home.html")
 
 
-@app.route("/register", methods=["GET", "POST"])
+@site.route("/register", methods=["GET", "POST"])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -91,33 +92,40 @@ def register():
     return render_template("register.html", title="Register", form=form)
 
 
-@app.route("/login", methods=['GET', 'POST'])
+@site.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
         email = form.email.data
         hashedPassword = sha256_crypt.hash("password")
         if email == 'admin@blog.com' and sha256_crypt.verify(form.password.data, hashedPassword):
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('site.dashboard'))
         else:
             flash('Login Unsuccessful. Please check username and password',
                   'danger')
     return render_template('login.html', title='Login', form=form)
 
 
-@app.route("/dashboard")
+@site.route("/dashboard")
 def dashboard():
     return render_template("dashboard.html", title="Dashboard")
 
-@app.route("/booking", methods=['GET', 'POST'])
+@site.route("/booking", methods=['GET', 'POST'])
 def booking():
-    return render_template("booking.html", cars = cars)
+    response = requests.get("http://127.0.0.1:5000/car")
+    data = json.loads(response.text)
+    print(data)
+    return render_template("booking.html", cars = data)
 
-@app.route("/bookingDetails/<carId>", methods=['GET', 'POST'])
+@site.route("/bookingDetails/<carId>", methods=['GET', 'POST'])
 def bookingDetails(carId):
     form = BookingForm()
     print(carId)
     return render_template("bookingDetails.html", form=form)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+
+
+
+
+
+
