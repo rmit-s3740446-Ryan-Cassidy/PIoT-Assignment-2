@@ -6,7 +6,9 @@ from flask_api import api, db
 from app import site
 import MySQLdb
 from database_utils import DatabaseUtils
+from flask_socketio import SocketIO
 
+socketio = SocketIO()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -24,7 +26,10 @@ db.init_app(app)
 app.register_blueprint(api)
 app.register_blueprint(site)
 
+socketio.init_app(app)
+
 if __name__ == "__main__":
     with DatabaseUtils() as db:
         db.createTables()
-    app.run(host = "0.0.0.0", debug=True)
+    socketio.run(app, host = "0.0.0.0", debug=True)
+    #app.run(host = "0.0.0.0", debug=True)
