@@ -93,32 +93,26 @@ loginSchema = LoginSchema(many = True)
 def getCars():
     cars = Car.query.all()
     result = carsSchema.dump(cars)
-    print(result)
     return jsonify(result)
 
 @api.route("/users", methods = ["GET"])
 def getUsers():
     users = User.query.all()
     result = usersSchema.dump(users)
-    print(result)
     return jsonify(result)
 
 @api.route("/logins", methods = ["GET"])
 def getLogins():
     logins = Login.query.all()
     result = loginSchema.dump(logins)
-    print(result)
     return jsonify(result)
 
 # Endpoint to create new user.
 @api.route("/registerUser", methods=["GET", "POST"])
 def addUser():
     data = request.get_json(force=True)
-    print(data)
-    print(data['password'])
     userWithSameUsername = User.query.filter_by(UserName=data['username']).first()
     userWithSameEmail = User.query.filter_by(Email=data['email']).first()
-    print(userWithSameUsername)
     if userWithSameEmail:
         return jsonify({"message":"This email is already registered with another account"})
     if userWithSameUsername:
@@ -142,8 +136,6 @@ def addUser():
 def checkLogin():
     data = request.get_json(force=True)
     user = Login.query.filter_by(UserName=data['username']).first()
-    print(data['password'])
-    print(user.Password)
     if user:
         if sha256_crypt.verify(data['password'],user.Password):
             return jsonify({"message":"Success"})
