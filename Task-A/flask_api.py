@@ -4,6 +4,7 @@ from flask_marshmallow import Marshmallow
 import os, requests, json
 from flask import current_app as app
 import sys
+from passlib.hash import sha256_crypt
 
 api = Blueprint("api", __name__)
 
@@ -47,6 +48,17 @@ class User(db.Model):
         self.Email = Email
         self.Role = Role
 
+class Login(db.Model):
+    __tablename__ = "Login"
+    LoginID = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    UserName = db.Column(db.Text)
+    Password = db.Column(db.Text)
+
+    def __init__(self, Password,UserName,LoginID = None):
+        self.LoginID = LoginID
+        self.UserName = UserName
+        self.Password = Password
+
 class CarSchema(ma.Schema):
     def __init__(self, **kwargs):
         super().__init__( **kwargs)
@@ -67,6 +79,16 @@ class UserSchema(ma.Schema):
 usersSchema = UserSchema()
 usersSchema = UserSchema(many = True)
 
+class LoginSchema(ma.Schema):
+    def __init__(self, **kwargs):
+        super().__init__( **kwargs)
+    
+    class Meta:
+        fields = ("LoginID","UserName","Password")
+
+loginSchema = LoginSchema()
+loginSchema = LoginSchema(many = True)
+
 @api.route("/car", methods = ["GET"])
 def getCars():
     cars = Car.query.all()
@@ -78,6 +100,13 @@ def getCars():
 def getUsers():
     users = User.query.all()
     result = usersSchema.dump(users)
+    print(result)
+    return jsonify(result)
+
+@api.route("/logins", methods = ["GET"])
+def getLogins():
+    logins = Login.query.all()
+    result = loginSchema.dump(logins)
     print(result)
     return jsonify(result)
 
@@ -99,11 +128,25 @@ def addUser():
     lastname = request.json["lastname"]
     username = request.json["username"]
     email = request.json["email"]
+    password = request.json["password"]
 
     newUser = User(FirstName = firstname,LastName = lastname,UserName = username,Email = email,Role="Customer")
+    newLoginDetails = Login(UserName = username, Password = password)
 
     db.session.add(newUser)
+    db.session.add(newLoginDetails)
     db.session.commit()
     return jsonify({"message":"Success"})
+
+@api.route("/loginUser", methods=["GET", "POST"])
+def checkLogin():
+    data = request.get_json(force=True)
+    user = Login.query.filter_by(UserName=data['username']).first()
+    print(data['password'])
+    print(user.Password)
+    if user:
+        if sha256_crypt.verify(data['password'],user.Password):
+            return jsonify({"message":"Success"})
+    return jsonify({"message":"Invalid username or password"})
 
 

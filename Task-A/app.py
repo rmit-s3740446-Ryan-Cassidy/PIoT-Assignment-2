@@ -88,9 +88,13 @@ def register():
         data = json.loads(response.text)
         if data['message'] == 'Success':
             print('success')
+            form.firstname.data = ""
+            form.lastname.data = ""
+            form.username.data = ""
+            form.email.data = ""
             flash(f"Account created for {form.username.data}!", "success")
         else:
-            flash(data['message'], "warning")
+            flash(data['message'], "danger")
     return render_template("register.html", title="Register", form=form)
 
 
@@ -98,13 +102,15 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        email = form.email.data
-        hashedPassword = sha256_crypt.hash("password")
-        if email == 'admin@blog.com' and sha256_crypt.verify(form.password.data, hashedPassword):
+        userLoginData = {"username":form.username.data, "password":form.password.data}
+        response = requests.post("http://127.0.0.1:5000/loginUser", json=userLoginData)
+        data = json.loads(response.text)
+        if data['message'] == 'Success':
+            print('success')
             return redirect(url_for('site.dashboard'))
         else:
-            flash('Login Unsuccessful. Please check username and password',
-                  'danger')
+            flash(data['message'], "danger")
+            form.username.data = ""
     return render_template('login.html', title='Login', form=form)
 
 
