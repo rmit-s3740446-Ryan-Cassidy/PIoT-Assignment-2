@@ -56,5 +56,19 @@ class DatabaseUtils:
                 )""")
             cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour) values ('Honda','Sedan','3073','Red','6','20')")
             cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour) values ('Civic','Sedan','3073','Red','6','20')")
+            #cursor.execure("drop table if exists Booking")
+            cursor.execute("""
+            create table if not exists Booking (
+                BookingID int not null auto_increment,
+                BookingDate date not null,
+                PickUpDate date not null,
+                PickUpTime time not null,
+                ReturnDate date null,
+                ReturnTime time null,
+                TotalCost text null,
+                CarID int not null,
+                UserID int not null,
+                constraint PK_Car primary key (BookingID)
+                )""")
             # cursor.execute("insert into User (FirstName,LastName,UserName,Email,Role) values ('Vineet','Bugtani','s3734938','vineet.bugtani@gmail.com','Customer')")
         self.connection.commit()

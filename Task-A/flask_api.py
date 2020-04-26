@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, Blueprint, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -59,6 +60,25 @@ class Login(db.Model):
         self.UserName = UserName
         self.Password = Password
 
+class Booking(db.Model):
+    __tablename__ = "Booking"
+    BookingID = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    BookingDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    PickUpDate = db.Column(db.DateTime)
+    PickUpTime = db.Column(db.DateTime)
+    ReturnDate = db.Column(db.DateTime)
+    ReturnTime = db.Column(db.DateTime)
+    TotalCost = db.Column(db.Text)
+
+    def __init__(self, BookingDate,PickUpDate,PickUpTime,ReturnDate,ReturnTime,TotalCost, BookingID = None):
+        self.BookingID = BookingID
+        self.BookingDate = BookingDate
+        self.PickUpDate = PickUpDate
+        self.PickUpTime = PickUpTime
+        self.ReturnDate = ReturnDate
+        self.ReturnTime = ReturnTime
+        self.TotalCost = TotalCost 
+
 class CarSchema(ma.Schema):
     def __init__(self, **kwargs):
         super().__init__( **kwargs)
@@ -88,6 +108,16 @@ class LoginSchema(ma.Schema):
 
 loginSchema = LoginSchema()
 loginSchema = LoginSchema(many = True)
+
+class BookingSchema(ma.Schema):
+    def __init__(self, **kwargs):
+        super().__init__( **kwargs)
+    
+    class Meta:
+        fields = ("BookingID","PickUpDate","PickUpTime","ReturnDate","ReturnTime","TotalCost")
+
+bookingSchema = BookingSchema()
+bookingSchema = BookingSchema(many = True)
 
 @api.route("/car", methods = ["GET"])
 def getCars():
@@ -141,4 +171,19 @@ def checkLogin():
             return jsonify({"message":"Success"})
     return jsonify({"message":"Invalid username or password"})
 
+# Endpoint to add new car rental booking.
+@api.route("/bookingDetails/<carId>", methods = ["POST"])
+def addBooking():
+    bookingDate = request.json["bookingDate"]
+    pickUpDate = request.json["pickUpDate"]
+    pickUpTime = request.json["pickUpTime"]
+    returnDate = request.json["returnDate"]
+    returnTime = request.json["returnTime"]
+    totalCost = request.json["totalCost"]
 
+    newBooking = Booking(BookingDate = bookingDate, PickUpDate = pickUpDate,PickUpTime = pickUpTime,ReturnDate = returnDate,ReturnTime = returnTime,TotalCost = totalCost)
+
+    db.session.add(newBooking)
+    db.session.commit()
+
+    return jsonify({"message":"Success"})
