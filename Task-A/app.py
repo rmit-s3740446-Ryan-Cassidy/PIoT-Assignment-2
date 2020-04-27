@@ -91,7 +91,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         userRegistrationData = {"firstname":form.firstname.data, "lastname":form.lastname.data, "username":form.username.data, "email":form.email.data, "password":sha256_crypt.hash(form.password.data)}
-        response = requests.post("http://127.0.0.1:5000/registerUser", json=userRegistrationData)
+        response = requests.post(request.host_url + "/registerUser", json=userRegistrationData)
         data = json.loads(response.text)
         if data['message'] == 'Success':
             form.firstname.data = ""
@@ -109,7 +109,8 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         userLoginData = {"username":form.username.data, "password":form.password.data}
-        response = requests.post("http://127.0.0.1:5000/loginUser", json=userLoginData)
+        print(request.base_url)
+        response = requests.post(request.host_url + "/loginUser", json=userLoginData)
         data = json.loads(response.text)
         if data['message'] == 'Success':
             return redirect(url_for('site.dashboard'))
@@ -125,7 +126,7 @@ def dashboard():
 
 @site.route("/booking", methods=['GET', 'POST'])
 def booking():
-    response = requests.get("http://127.0.0.1:5000/car")
+    response = requests.get(request.host_url + "/car")
     data = json.loads(response.text)
     return render_template("booking.html", cars = data)
 
@@ -135,7 +136,7 @@ def bookingDetails(carId):
     if form.validate_on_submit():
         userBookingData = {'pickUpDate':form.pickup_date.data, 'pickUpTime':form.pickup_time.data, 'returnDate':form.return_date.data, 'returnTime':form.return_time.data,'carID':carId}
         userBookingJSONData = json.dumps(userBookingData, cls=DateTimeEncoder)
-        response = requests.post("http://127.0.0.1:5000/bookingDetails", json=userBookingJSONData)
+        response = requests.post(request.host_url + "/bookingDetails", json=userBookingJSONData)
         data = json.loads(response.text)
         if data['message'] == 'Success':
             flash(data['message'], "success")
