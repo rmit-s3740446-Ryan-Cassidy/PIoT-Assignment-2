@@ -6,7 +6,10 @@ import os, requests, json
 from flask import current_app as app
 import sys
 from passlib.hash import sha256_crypt
-
+from datetime import datetime, date, time
+from json import JSONDecoder
+import datetime
+from datetime import  timedelta
 api = Blueprint("api", __name__)
 
 db = SQLAlchemy()
@@ -63,21 +66,23 @@ class Login(db.Model):
 class Booking(db.Model):
     __tablename__ = "Booking"
     BookingID = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    BookingDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    PickUpDate = db.Column(db.DateTime)
-    PickUpTime = db.Column(db.DateTime)
-    ReturnDate = db.Column(db.DateTime)
-    ReturnTime = db.Column(db.DateTime)
-    TotalCost = db.Column(db.Text)
+    # BookingDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    PickUpDate = db.Column(db.Date)
+    PickUpTime = db.Column(db.Time)
+    ReturnDate = db.Column(db.Date)
+    ReturnTime = db.Column(db.Time)
+    CarID = db.Column(db.Integer)
+    # TotalCost = db.Column(db.Text)
 
-    def __init__(self, BookingDate,PickUpDate,PickUpTime,ReturnDate,ReturnTime,TotalCost, BookingID = None):
+    def __init__(self,PickUpDate,PickUpTime,ReturnDate,ReturnTime,CarID, BookingID = None):
         self.BookingID = BookingID
-        self.BookingDate = BookingDate
+        # self.BookingDate = BookingDate
         self.PickUpDate = PickUpDate
         self.PickUpTime = PickUpTime
         self.ReturnDate = ReturnDate
         self.ReturnTime = ReturnTime
-        self.TotalCost = TotalCost 
+        self.CarID = CarID
+        # self.TotalCost = TotalCost 
 
 class CarSchema(ma.Schema):
     def __init__(self, **kwargs):
@@ -114,7 +119,7 @@ class BookingSchema(ma.Schema):
         super().__init__( **kwargs)
     
     class Meta:
-        fields = ("BookingID","PickUpDate","PickUpTime","ReturnDate","ReturnTime","TotalCost")
+        fields = ("BookingID","PickUpDate","PickUpTime","ReturnDate","ReturnTime","CarID")
 
 bookingSchema = BookingSchema()
 bookingSchema = BookingSchema(many = True)
@@ -135,6 +140,14 @@ def getUsers():
 def getLogins():
     logins = Login.query.all()
     result = loginSchema.dump(logins)
+    return jsonify(result)
+
+@api.route("/bookings/<carId>", methods = ["GET"])
+def getBookings(carId):
+    bookings = Booking.query.filter_by(CarID=carId)
+    # bookings = Booking.query.all()
+    result = bookingSchema.dump(bookings)
+
     return jsonify(result)
 
 # Endpoint to create new user.
@@ -165,25 +178,41 @@ def addUser():
 @api.route("/loginUser", methods=["GET", "POST"])
 def checkLogin():
     data = request.get_json(force=True)
+    
     user = Login.query.filter_by(UserName=data['username']).first()
     if user:
         if sha256_crypt.verify(data['password'],user.Password):
             return jsonify({"message":"Success"})
     return jsonify({"message":"Invalid username or password"})
 
-# Endpoint to add new car rental booking.
-@api.route("/bookingDetails/<carId>", methods = ["POST"])
+@api.route("/bookingDetails", methods=["GET", "POST"])
 def addBooking():
-    bookingDate = request.json["bookingDate"]
-    pickUpDate = request.json["pickUpDate"]
-    pickUpTime = request.json["pickUpTime"]
-    returnDate = request.json["returnDate"]
-    returnTime = request.json["returnTime"]
-    totalCost = request.json["totalCost"]
-
-    newBooking = Booking(BookingDate = bookingDate, PickUpDate = pickUpDate,PickUpTime = pickUpTime,ReturnDate = returnDate,ReturnTime = returnTime,TotalCost = totalCost)
-
+    data = request.get_json(force=True)
+    dataOne = json.loads(data, cls=json.JSONDecoder)
+    pickUpDate= date.fromisoformat(dataOne['pickUpDate'])
+    whileLoopPickUpDate = pickUpDate
+    pickUpTime=dataOne['pickUpTime']
+    returnDate=date.fromisoformat(dataOne['returnDate'])
+    returnTime=dataOne['returnTime']
+    carID=dataOne['carID']
+    if pickUpDate == returnDate:
+        return jsonify({"message":"Pick up and return dates cannot be same"})
+    if pickUpDate >= returnDate:
+        return jsonify({"message":"Pick up date has to be before return date"})
+    response = requests.get("http://127.0.0.1:5000/bookings/" +carID)
+    data = json.loads(response.text)
+    for x in data:
+        whileLoopPickUpDate = pickUpDate
+        xpickUpDate = x['PickUpDate']
+        xreturnDate = x['ReturnDate']
+        format_str = '%Y-%m-%d'
+        pickUpDateTime = datetime.datetime.strptime(xpickUpDate, format_str)
+        returnDateTime = datetime.datetime.strptime(xreturnDate, format_str)
+        while whileLoopPickUpDate <= returnDate:
+            if pickUpDateTime.date() <= whileLoopPickUpDate <= returnDateTime.date():
+                return jsonify({"message":"Car not available in this slot"})
+            whileLoopPickUpDate = whileLoopPickUpDate + timedelta(days=1)
+    newBooking = Booking(PickUpDate =pickUpDate,PickUpTime = pickUpTime,ReturnDate = returnDate,ReturnTime = returnTime,CarID=carID)
     db.session.add(newBooking)
     db.session.commit()
-
     return jsonify({"message":"Success"})

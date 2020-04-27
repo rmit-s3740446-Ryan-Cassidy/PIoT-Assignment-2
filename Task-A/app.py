@@ -5,6 +5,13 @@ import sys
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
+from json import JSONEncoder
+import datetime
+
+class DateTimeEncoder(JSONEncoder):
+    def default(self,obj):
+        if isinstance(obj, (datetime.date, datetime.datetime,datetime.time)):
+            return obj.isoformat()
 
 site = Blueprint("site", __name__)
 cars = [
@@ -87,7 +94,6 @@ def register():
         response = requests.post("http://127.0.0.1:5000/registerUser", json=userRegistrationData)
         data = json.loads(response.text)
         if data['message'] == 'Success':
-            print('success')
             form.firstname.data = ""
             form.lastname.data = ""
             form.username.data = ""
@@ -106,7 +112,6 @@ def login():
         response = requests.post("http://127.0.0.1:5000/loginUser", json=userLoginData)
         data = json.loads(response.text)
         if data['message'] == 'Success':
-            print('success')
             return redirect(url_for('site.dashboard'))
         else:
             flash(data['message'], "danger")
@@ -122,13 +127,20 @@ def dashboard():
 def booking():
     response = requests.get("http://127.0.0.1:5000/car")
     data = json.loads(response.text)
-    print(data)
     return render_template("booking.html", cars = data)
 
 @site.route("/bookingDetails/<carId>", methods=['GET', 'POST'])
 def bookingDetails(carId):
     form = BookingForm()
-    print(carId)
+    if form.validate_on_submit():
+        userBookingData = {'pickUpDate':form.pickup_date.data, 'pickUpTime':form.pickup_time.data, 'returnDate':form.return_date.data, 'returnTime':form.return_time.data,'carID':carId}
+        userBookingJSONData = json.dumps(userBookingData, cls=DateTimeEncoder)
+        response = requests.post("http://127.0.0.1:5000/bookingDetails", json=userBookingJSONData)
+        data = json.loads(response.text)
+        if data['message'] == 'Success':
+            flash(data['message'], "success")
+        else:
+            flash(data['message'], "danger")
     return render_template("bookingDetails.html", form=form)
 
 
