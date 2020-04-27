@@ -5,6 +5,13 @@ import sys
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
+from json import JSONEncoder
+import datetime
+
+class DateTimeEncoder(JSONEncoder):
+    def default(self,obj):
+        if isinstance(obj, (datetime.date, datetime.datetime,datetime.time)):
+            return obj.isoformat()
 
 site = Blueprint("site", __name__)
 cars = [
@@ -83,12 +90,17 @@ def home():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        print(form.username.data)
-        print(form.lastname.data)
-        print(form.email.data)
-        print(form.password.data)
-        flash(f"Account created for {form.username.data}!", "success")
-        return redirect(url_for("register"))
+        userRegistrationData = {"firstname":form.firstname.data, "lastname":form.lastname.data, "username":form.username.data, "email":form.email.data, "password":sha256_crypt.hash(form.password.data)}
+        response = requests.post("http://127.0.0.1:5000/registerUser", json=userRegistrationData)
+        data = json.loads(response.text)
+        if data['message'] == 'Success':
+            form.firstname.data = ""
+            form.lastname.data = ""
+            form.username.data = ""
+            form.email.data = ""
+            flash(f"Account created for {form.username.data}!", "success")
+        else:
+            flash(data['message'], "danger")
     return render_template("register.html", title="Register", form=form)
 
 
@@ -96,13 +108,14 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        email = form.email.data
-        hashedPassword = sha256_crypt.hash("password")
-        if email == 'admin@blog.com' and sha256_crypt.verify(form.password.data, hashedPassword):
+        userLoginData = {"username":form.username.data, "password":form.password.data}
+        response = requests.post("http://127.0.0.1:5000/loginUser", json=userLoginData)
+        data = json.loads(response.text)
+        if data['message'] == 'Success':
             return redirect(url_for('site.dashboard'))
         else:
-            flash('Login Unsuccessful. Please check username and password',
-                  'danger')
+            flash(data['message'], "danger")
+            form.username.data = ""
     return render_template('login.html', title='Login', form=form)
 
 
@@ -114,13 +127,20 @@ def dashboard():
 def booking():
     response = requests.get("http://127.0.0.1:5000/car")
     data = json.loads(response.text)
-    print(data)
     return render_template("booking.html", cars = data)
 
 @site.route("/bookingDetails/<carId>", methods=['GET', 'POST'])
 def bookingDetails(carId):
     form = BookingForm()
-    print(carId)
+    if form.validate_on_submit():
+        userBookingData = {'pickUpDate':form.pickup_date.data, 'pickUpTime':form.pickup_time.data, 'returnDate':form.return_date.data, 'returnTime':form.return_time.data,'carID':carId}
+        userBookingJSONData = json.dumps(userBookingData, cls=DateTimeEncoder)
+        response = requests.post("http://127.0.0.1:5000/bookingDetails", json=userBookingJSONData)
+        data = json.loads(response.text)
+        if data['message'] == 'Success':
+            flash(data['message'], "success")
+        else:
+            flash(data['message'], "danger")
     return render_template("bookingDetails.html", form=form)
 
 
