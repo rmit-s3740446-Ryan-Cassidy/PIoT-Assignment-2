@@ -2,6 +2,8 @@ import socket
 import json
 import sys
 import threading
+import time
+from socketioClient import sioc
 
 host = None
 port = None
@@ -17,13 +19,17 @@ def loadconfig(self) :
         sys.exit("Error when reading from Json.")
 loadconfig
 # Socket to Master
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    print("Connecting to Master")
-    s.connect(host, port)
+sioc.connect('http://192.168.1.225:5000')
+print('my sid is', sioc.sid)
+
+while True:
+    sioc.emit('message', 'hello there')
+    time.sleep(5)
+
 # Prompt user for login type
-    print("1. User Credentials")
-    print("2. Facial Recognition")
-    print("Select authentication method: ")
+    # print("1. User Credentials")
+    # print("2. Facial Recognition")
+    # print("Select authentication method: ")
 # User Credential Login
 # Facial Recognition Login
 # Send authentication attempt to Master
