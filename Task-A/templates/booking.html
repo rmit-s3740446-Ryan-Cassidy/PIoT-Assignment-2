@@ -1,24 +1,58 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "layout.html" %}
+{% block content %}
+<div class="row justify-content-center">
+        <form method="POST" action="" class="form-inline">
+            {{ form.hidden_tag() }}
+              <div class="form-group">
+                    {{ form.make.label(class="form-control-label") }}
+                    {% if form.make.errors %}
+                        {{ form.make(class="form-control form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.make.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.make(class="form-control form-control ml-2") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.seats.label(class="form-control-label ml-2") }}
+                    {% if form.seats.errors %}
+                        {{ form.seats(class="form-control form-control is-invalid ml-2") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.seats.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.seats(class="form-control form-control ml-2") }}
+                    {% endif %}
+                </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info ml-4") }}
+            </div>
+        </form>
+</div>
 <div class="container">
-  <div class="row">
-    {% for car in cars %}
-    <div class="col-lg-4">
-      <div class="card mt-2" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title">{{car.Make}}</h5>
-          <p class="card-text">
-            <i class="fas fa-car"></i>: {{car.Type}}
-            <i class="fas fa-male ml-2"></i> : {{car.Seats}}
-          </p>
-          <p class="card-text mt-0">
-            <i class="fas fa-map-marker-alt"></i>: {{car.Location}}
-            <i class="fas fa-dollar-sign ml-2"></i>: {{car.CostPerHour}} /hr
-          </p>
-          <a href={{ url_for('site.bookingDetails', carId = car.CarID) }} class="btn btn-outline-info text-center">Book Now</a>
+    <div class="row">
+      {% for car in cars %}
+      <div class="col-lg-4">
+        <div class="card mt-5" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">{{car.Make}}</h5>
+            <p class="card-text">
+              <i class="fas fa-car"></i>: {{car.Type}}
+              <i class="fas fa-male ml-2"></i> : {{car.Seats}}
+            </p>
+            <p class="card-text mt-0">
+              <i class="fas fa-map-marker-alt"></i>: {{car.Location}}
+              <i class="fas fa-dollar-sign ml-2"></i>: {{car.CostPerHour}} /hr
+            </p>
+            <a href={{ url_for('site.bookingDetails', carId = car.CarID) }} class="btn btn-outline-info text-center">Book Now</a>
+          </div>
         </div>
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
-  {% endblock content %}
-</div>
+{% endblock content %}
