@@ -54,9 +54,9 @@ class DatabaseUtils:
                 Password text not  null,
                 constraint PK_Car primary key (LoginID)
                 )""")
-            cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour) values ('Honda','Sedan','3073','Red','6','20')")
-            cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour) values ('Civic','Sedan','3073','Red','6','20')")
-            cursor.execute("drop table if exists Booking")
+            #cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour) values ('Honda','Sedan','3073','Red','6','20')")
+            #cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour) values ('Civic','Sedan','3073','Red','6','20')")
+            #cursor.execute("drop table if exists Booking")
             cursor.execute("""
             create table if not exists Booking (
                 BookingID int not null auto_increment,

@@ -3,35 +3,50 @@ import json
 import sys
 import threading
 import time
-from socketioClient import sioc
+from socketioClient import sioc, auth, carList
 
 ip = None
+carList = None
 
-def loadconfig(self) :
+def loadconfig() :
     try:
         with open("config.json") as f:
+            global ip
             data = json.load(f)
-            self.ip = "http://" + data["HOST"] + ":" + data["PORT"]
+            print(data['host'])
+            ip = "http://" + data["host"] + ":" + data["port"]
     except Exception as e:
         print(str(e))
         sys.exit("Error when reading from Json.")
-loadconfig
-# Socket to Master
-sioc.connect(ip)
-print('my sid is', sioc.sid)
 
-while True :
+
+# Socket to Master
+def connect() : 
+    sioc.connect(ip)
+    print('my sid is', sioc.sid)
+
+
 # Prompt user for login type
+def login() :
     print("1. User Credentials")
     print("2. Facial Recognition")
     option = input("Select authentication method: ")
+    # User Credential Login
     if option == '1' :
         email = input('Please enter email: ')
         password = input('Please enter password: ')
+    # Emit authentication event
+        sioc.emit('usercredauth', [email, password], callback = loginresp)
     else :
         exit("Other options NYI")
-    
-# User Credential Login
+
+def loginresp(data) :
+    if data == 'Success' :
+        print('Login Successful')
+    else : 
+        print('Incorrect username or password')
+        time.sleep(1)
+        login()
 # Facial Recognition Login
 # Send authentication attempt to Master
 # If true, sign in, else ask user again
@@ -39,3 +54,8 @@ while True :
 # Google map check every 30 seconds
 # Prompt user to do something to logout
 # Send car status to Master on logout
+
+if __name__ == "__main__":
+    loadconfig()
+    connect()
+    login()
