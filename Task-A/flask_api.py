@@ -10,6 +10,7 @@ from datetime import datetime, date, time
 from json import JSONDecoder
 import datetime
 from datetime import timedelta
+from datetime import date, time 
 
 api = Blueprint("api", __name__)
 
@@ -252,6 +253,38 @@ def getBookingsByUserId(userId):
     )
     result = bookingDetailsSchema.dump(bookings)
     return jsonify(result)
+
+# This api will fetch only those bookings for a particular user where the return date and return time is greater than the
+# current time and todays date
+# For testing this add a booking one in the morning and one at night.You would only receive the booking which at night.
+@api.route("/bookingsByUserAndDate/<userId>", methods=["GET", "POST"])
+def getBookingsByUserIdAndDate(userId):
+    today = date.today().isoformat()
+    currentTime = datetime.datetime.now().time()
+    print(datetime.datetime.now().time())
+    bookings = (
+        Booking.query.join(Car, Booking.CarID == Car.CarID)
+        .add_columns(
+            Booking.BookingID,
+            Booking.PickUpDate,
+            Booking.PickUpTime,
+            Booking.ReturnDate,
+            Booking.ReturnTime,
+            Booking.CarID,
+            Booking.UserName,
+            Car.CarID,
+            Car.Make,
+            Car.Type,
+            Car.Location,
+            Car.Color,
+            Car.Seats,
+            Car.CostPerHour,
+        )
+        .filter(Booking.UserName == userId, Booking.ReturnDate >= today, Booking.ReturnTime >= currentTime )
+    )
+    result = bookingDetailsSchema.dump(bookings)
+    return jsonify(result)
+
 
 
 @api.route("/bookings/", methods=["GET"])
