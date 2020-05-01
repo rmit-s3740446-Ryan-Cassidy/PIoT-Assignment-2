@@ -103,16 +103,8 @@ def home():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        userRegistrationData = {
-            "firstname": form.firstname.data,
-            "lastname": form.lastname.data,
-            "username": form.username.data,
-            "email": form.email.data,
-            "password": sha256_crypt.hash(form.password.data),
-        }
-        response = requests.post(
-            "http://127.0.0.1:5000/registerUser", json=userRegistrationData
-        )
+        userRegistrationData = {"firstname":form.firstname.data, "lastname":form.lastname.data, "username":form.username.data, "email":form.email.data, "password":sha256_crypt.hash(form.password.data)}
+        response = requests.post(request.host_url + "/registerUser", json=userRegistrationData)
         data = json.loads(response.text)
         if data["message"] == "Success":
             form.firstname.data = ""
@@ -129,8 +121,9 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        userLoginData = {"username": form.username.data, "password": form.password.data}
-        response = requests.post("http://127.0.0.1:5000/loginUser", json=userLoginData)
+        userLoginData = {"username":form.username.data, "password":form.password.data}
+        print(request.base_url)
+        response = requests.post(request.host_url + "/loginUser", json=userLoginData)
         data = json.loads(response.text)
         if data["message"] == "Success":
             session["username"] = form.username.data
@@ -145,13 +138,12 @@ def login():
 def dashboard():
     return render_template("dashboard.html", title="Dashboard")
 
-
 @site.route("/booking/", defaults={"name": "Person"}, methods=["GET", "POST"])
 @site.route("/booking/<name>", methods=["GET", "POST"])
 def booking(name):
     form = CarsFilterForm()
     response = requests.get(
-        "http://127.0.0.1:5000/car/" + form.make.data + "/" + form.seats.data
+        request.host_url + "/car" + form.make.data + "/" + form.seats.data
     )
     data = json.loads(response.text)
     return render_template("booking.html", cars=data, form=form)
@@ -170,9 +162,7 @@ def bookingDetails(carId):
             "username": session["username"],
         }
         userBookingJSONData = json.dumps(userBookingData, cls=DateTimeEncoder)
-        response = requests.post(
-            "http://127.0.0.1:5000/bookingDetails", json=userBookingJSONData
-        )
+        response = requests.post(request.host_url + "/bookingDetails", json=userBookingJSONData)
         data = json.loads(response.text)
         if data["message"] == "Success":
             flash(data["message"], "success")

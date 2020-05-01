@@ -353,8 +353,8 @@ def addBooking():
     if pickUpDate == returnDate:
         return jsonify({"message": "Pick up and return dates cannot be same"})
     if pickUpDate >= returnDate:
-        return jsonify({"message": "Pick up date has to be before return date"})
-    response = requests.get("http://127.0.0.1:5000/bookings/" + carID)
+        return jsonify({"message":"Pick up date has to be before return date"})
+    response = requests.get(request.host_url + "/bookings/" +carID)
     data = json.loads(response.text)
     for x in data:
         whileLoopPickUpDate = pickUpDate
