@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField,SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from wtforms.fields.html5 import DateField, TimeField
 
@@ -27,6 +27,20 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
     remember = BooleanField("Remember Me")
     submit = SubmitField("Login")
+
+class CarsFilterForm(FlaskForm):
+    make = SelectField(
+        u'Filter by Make:',
+        choices = [('All makes', 'All makes'),('Honda', 'Honda'), ('Civic', 'Civic')], default='All makes'
+        
+    )
+    seats = SelectField(
+        u'Filter By Seats:',
+        choices = [('All seats', 'All seats'),('6', '6'), ('7', '7')], default='All seats'
+        
+    )
+    submit = SubmitField("Filter")
+
 
 class BookingForm(FlaskForm):
     pickup_date = DateField('Enter pick up date', format='%Y-%m-%d')
