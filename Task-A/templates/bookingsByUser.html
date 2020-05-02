@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3 style = "text-align:center">Booking History</h3>
+<div class="container">
+    <div class="row">
+      {% for booking in data %}
+      <div class="col-lg-4">
+        <div class="card mt-5" style="width: 20rem;">
+          <div class="card-body">
+            <h5 class="card-title">Booking ID: {{booking.BookingID}}</h5>
+            <p class="card-text">
+                <i class="far fa-calendar-plus"></i> Pick-Up: {{booking.PickUpDate}}, {{booking.PickUpTime}}
+                <br><i class="far fa-calendar-minus"></i> Return: {{booking.ReturnDate}}, {{booking.ReturnTime}}
+            </p>
+            <p class="card-text">
+                Car Info:
+                <br><i class="fas fa-car"></i> {{booking.Make}} ({{booking.Seats}}-Seater {{booking.Color}} {{booking.Type}})
+                <br><i class="fas fa-map-marker-alt"></i> {{booking.Location}}
+            </p>
+            {% if booking.PickUpDate > now  %}
+            <a class="btn btn-outline-info text-center">Cancel Booking</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+{% endblock content %}
