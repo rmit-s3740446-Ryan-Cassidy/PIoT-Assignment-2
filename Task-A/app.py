@@ -6,12 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
 from json import JSONEncoder
-<<<<<<< HEAD
 import datetime
 from datetime import date, time
-=======
-from datetime import datetime
->>>>>>> 7cc9f2dc439b2ace0f57238c906e40916fcfb028
 from cal import GCal
 from google_auth_oauthlib.flow import Flow
 
@@ -93,10 +89,7 @@ cars = [
 @site.route("/")
 @site.route("/home")
 def home():
-<<<<<<< HEAD
     flask.session.pop('username')
-=======
->>>>>>> 7cc9f2dc439b2ace0f57238c906e40916fcfb028
     return flask.render_template("home.html")
 
 
@@ -202,11 +195,7 @@ def bookingsByUser():
         "http://127.0.0.1:5000/bookingsByUser/" + flask.session["username"]
     )
     data = json.loads(response.text)
-<<<<<<< HEAD
     return flask.render_template("bookingsByUser.html", title ="Booking History", data=data, now=date.today().isoformat())
-=======
-    return flask.render_template("bookingsByUser.html", title ="Booking History", data=data, now=datetime.now().strftime('%Y-%m-%d'))
->>>>>>> 7cc9f2dc439b2ace0f57238c906e40916fcfb028
 
 
 1
