@@ -89,8 +89,12 @@ cars = [
 @site.route("/")
 @site.route("/home")
 def home():
-    flask.session.pop('username')
     return flask.render_template("home.html")
+
+@site.route("/logout")
+def logout():
+        flask.session.pop('username')
+        return flask.redirect(flask.url_for("site.home"))
 
 
 @site.route("/register", methods=["GET", "POST"])
@@ -197,10 +201,6 @@ def bookingsByUser():
     data = json.loads(response.text)
     return flask.render_template("bookingsByUser.html", title ="Booking History", data=data, now=date.today().isoformat())
 
-
-1
-2
-3
 
 def credentials_to_dict(credentials):
   return {'token': credentials.token,
