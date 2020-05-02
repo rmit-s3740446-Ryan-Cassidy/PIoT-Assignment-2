@@ -122,7 +122,6 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         userLoginData = {"username":form.username.data, "password":form.password.data}
-        print(request.base_url)
         response = requests.post(request.host_url + "/loginUser", json=userLoginData)
         data = json.loads(response.text)
         if data["message"] == "Success":

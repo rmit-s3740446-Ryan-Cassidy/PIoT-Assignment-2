@@ -1,6 +1,8 @@
 import socketio
 
 sioc = socketio.Client()
+auth = False
+carList = []
 
 # Socket Events
 @sioc.event
