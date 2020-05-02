@@ -12,3 +12,4 @@ Task-A/__pycache__/*
 # Local History for Visual Studio Code
 .history/
 .DS_Store
+token.pickle
