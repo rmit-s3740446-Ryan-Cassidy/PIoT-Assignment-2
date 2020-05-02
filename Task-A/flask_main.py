@@ -33,4 +33,5 @@ sios.init_app(app)
 if __name__ == "__main__":
     with DatabaseUtils() as db:
         db.createTables()
-    sios.run(app, host = "192.168.1.225", debug=True)
+    #sios.run(app, host = "192.168.1.225", debug=True)
+    app.run(host="0.0.0.0", debug=True)
