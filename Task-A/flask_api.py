@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, Blueprint, request, jsonify, render_template
+from flask import Flask, Blueprint, request, jsonify, render_template,redirect,url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
@@ -338,6 +338,12 @@ def checkLogin():
             return jsonify({"message": "Success"})
     return jsonify({"message": "Invalid username or password"})
 
+@api.route("/cancelBooking/<bookingId>", methods = ["GET", "POST"])
+def cancelBooking(bookingId):
+    cancel = Booking.query.filter_by(BookingID = bookingId).one()
+    db.session.delete(cancel)
+    db.session.commit()
+    return redirect(url_for("site.bookingsByUser"))
 
 @api.route("/bookingDetails", methods=["GET", "POST"])
 def addBooking():
