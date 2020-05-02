@@ -16,7 +16,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
 from json import JSONEncoder
-from datetime import datetime
+import datetime
+from datetime import date, time 
 
 
 class DateTimeEncoder(JSONEncoder):
@@ -96,6 +97,7 @@ cars = [
 @site.route("/")
 @site.route("/home")
 def home():
+    session.pop('username')
     return render_template("home.html")
 
 
@@ -177,7 +179,7 @@ def bookingsByUser():
         "http://127.0.0.1:5000/bookingsByUser/" + session["username"]
     )
     data = json.loads(response.text)
-    return render_template("bookingsByUser.html", title ="Booking History", data=data, now=datetime.now().strftime('%Y-%m-%d'))
+    return render_template("bookingsByUser.html", title ="Booking History", data=data, now=date.today().isoformat())
 
 
 1
