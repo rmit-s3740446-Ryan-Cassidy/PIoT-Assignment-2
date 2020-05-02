@@ -338,6 +338,12 @@ def checkLogin():
             return jsonify({"message": "Success"})
     return jsonify({"message": "Invalid username or password"})
 
+@api.route("/cancelBooking/<bookingId>", methods = ["GET", "POST"])
+def cancelBooking(bookingId):
+    cancel = Booking.query.filter_by(BookingID = bookingId).one()
+    db.session.delete(cancel)
+    db.session.commit()
+    return jsonify({"message": "Success"})
 
 @api.route("/bookingDetails", methods=["GET", "POST"])
 def addBooking():

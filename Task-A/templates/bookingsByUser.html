@@ -18,7 +18,7 @@
                 <br><i class="fas fa-map-marker-alt"></i> {{booking.Location}}
             </p>
             {% if booking.PickUpDate > now  %}
-            <a class="btn btn-outline-info text-center">Cancel Booking</a>
+            <a href={{ url_for('api.cancelBooking', bookingId = booking.BookingID) }} class="btn btn-outline-info text-center">Cancel Booking</a>
             {% endif %}
           </div>
         </div>
