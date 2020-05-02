@@ -12,6 +12,7 @@ from socketioServer import sios
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 basedir = os.path.abspath(os.path.dirname(__file__))
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 HOST = "35.244.74.229"
 USER = "root"
