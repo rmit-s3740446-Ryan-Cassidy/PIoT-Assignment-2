@@ -35,23 +35,38 @@ def login() :
     if option == '1' :
         email = input('Please enter email: ')
         password = input('Please enter password: ')
-    # Emit authentication event
+    # Send user credential authentication attempt to Master
         sioc.emit('usercredauth', [email, password], callback = loginresp)
     else :
         exit("Other options NYI")
 
-def loginresp(data) :
+def loginresp(auth, cars) :
     global carList
-    print(data[0])
-    carList = data[1]
-    if data[0] == 'Success' :
+    carList = cars
+    if auth == 'Success' :
         print('Login Successful')
+        time.sleep(1)
+        selectCar()
     else : 
         print('Incorrect username or password')
         time.sleep(1)
         login()
+
+def selectCar() :
+    try :
+        for index, car in enumerate(carList, start=1):
+            print(index, ". " + car["Make"] + ' | ' + car["Type"])
+        val = input("Please select a booked car: ")
+        option = int(val) - 1
+        if len(carList[option]) > 0:
+            car = carList[option]
+            print("Selected: " + car["Make"] + ' | ' + car["Type"])
+        else:
+            raise ValueError
+    except ValueError:
+        print("Not a valid selection")
+        selectCar()
 # Facial Recognition Login
-# Send authentication attempt to Master
 # If true, sign in, else ask user again
 # On sign in, send new car status to Master
 # Google map check every 30 seconds

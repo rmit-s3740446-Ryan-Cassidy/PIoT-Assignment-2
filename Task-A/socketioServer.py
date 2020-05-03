@@ -14,8 +14,8 @@ def handle_usercred(message):
     authData = json.loads(authResponse.text)
     if authData['message'] == 'Success':
         carResponse = requests.post(request.host_url + "/bookingsByUserAndDate/" + message[0])
-        carList = json.loads(carResponse.text)
-        return 'Success'
+        cars = json.loads(carResponse.text)
+        return 'Success', cars
     else:
         return 'Fail'
 
