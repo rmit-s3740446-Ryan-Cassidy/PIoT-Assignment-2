@@ -41,7 +41,10 @@ def login() :
         exit("Other options NYI")
 
 def loginresp(data) :
-    if data == 'Success' :
+    global carList
+    print(data[0])
+    carList = data[1]
+    if data[0] == 'Success' :
         print('Login Successful')
     else : 
         print('Incorrect username or password')
