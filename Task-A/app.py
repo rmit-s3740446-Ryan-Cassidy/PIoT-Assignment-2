@@ -97,7 +97,7 @@ cars = [
 @site.route("/")
 @site.route("/home")
 def home():
-    session.pop('username')
+    # session.pop('username')
     return render_template("home.html")
 
 
