@@ -1,5 +1,6 @@
 venv/
 Task-A/__pycache__/*
+config.json
 
 #Ignore VSCode local workspace files
 .vscode
