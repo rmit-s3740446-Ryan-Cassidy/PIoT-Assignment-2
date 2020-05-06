@@ -347,6 +347,7 @@ def cancelBooking(bookingId):
 
 @api.route("/bookingDetails", methods=["GET", "POST"])
 def addBooking():
+    today = date.today()
     data = request.get_json(force=True)
     dataOne = json.loads(data, cls=json.JSONDecoder)
     pickUpDate = date.fromisoformat(dataOne["pickUpDate"])
@@ -358,6 +359,9 @@ def addBooking():
     username = dataOne["username"]
     if pickUpDate == returnDate:
         return jsonify({"message": "Pick up and return dates cannot be same"})
+    if pickUpDate < today:
+        print('came here')
+        return jsonify({"message": "Cannot enter a date in the past"})
     if pickUpDate >= returnDate:
         return jsonify({"message":"Pick up date has to be before return date"})
     response = requests.get(request.host_url + "/bookings/" +carID)
