@@ -3,12 +3,15 @@ import json
 import sys
 import threading
 import time
+import threading as th
 from socketioClient import sioc, auth, carList
 
 ip = None
 carList = None
+car = None
+looping = True
 
-def loadconfig() :
+def load_config() :
     try:
         with open("config.json") as f:
             global ip
@@ -37,12 +40,14 @@ def login() :
         password = input('Please enter password: ')
     # Send user credential authentication attempt to Master
         sioc.emit('usercredauth', [email, password], callback = loginresp)
+    # Facial Recognition Login
     else :
         exit("Other options NYI")
 
 def loginresp(auth, cars) :
     global carList
     carList = cars
+    # If true, sign in, else ask user again
     if auth == 'Success' :
         print('Login Successful')
         time.sleep(1)
@@ -52,7 +57,9 @@ def loginresp(auth, cars) :
         time.sleep(1)
         login()
 
-def selectCar() :
+def select_car() :
+    global car
+    # User selects booked car from list
     try :
         for index, car in enumerate(carList, start=1):
             print(index, ". " + car["Make"] + ' | ' + car["Type"])
@@ -61,19 +68,30 @@ def selectCar() :
         if len(carList[option]) > 0:
             car = carList[option]
             print("Selected: " + car["Make"] + ' | ' + car["Type"])
+            time.sleep(1)
+            print("Car unlocked")
+            # Send selected car status to Master
         else:
             raise ValueError
     except ValueError:
         print("Not a valid selection")
         selectCar()
-# Facial Recognition Login
-# If true, sign in, else ask user again
-# On sign in, send new car status to Master
-# Google map check every 30 seconds
-# Prompt user to do something to logout
-# Send car status to Master on logout
+
+def wait_for_user_input() :
+    global looping
+    input()
+    looping = False
+
+def location_update() :
+    # Prompt user to do something to logout
+    print("Press enter to lock car")
+    th.Thread(target=wait_for_user_input, args=(), name='wait_for_user_input', daemon=True).start()
+    while loop:
+        # Google map check every 30 seconds
+
+    # Send car status to Master on logout
 
 if __name__ == "__main__":
-    loadconfig()
+    load_config()
     connect()
     login()
