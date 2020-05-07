@@ -21,8 +21,10 @@ def handle_usercred(message):
 
 @sios.on('carupdatestatus')
 def handle_carupdatestatus(message):
-    print("TBD")
+    print('received updated car status')
+    print(message)
 
 @sios.on('carupdatelocation')
 def handle_carupdatelocation(message):
-    print("TBD")
+    print('received updated car location')
+    print(message)

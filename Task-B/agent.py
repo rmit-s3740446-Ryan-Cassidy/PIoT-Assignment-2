@@ -3,6 +3,7 @@ import json
 import sys
 import threading
 import time
+import requests
 import threading as th
 from socketioClient import sioc, auth, carList
 
@@ -10,14 +11,18 @@ ip = None
 carList = None
 car = None
 looping = True
+geolocateURL = None
+
 
 def load_config() :
     try:
         with open("config.json") as f:
             global ip
+            global geolocateURL
             data = json.load(f)
             print(data['host'])
             ip = "http://" + data["host"] + ":" + data["port"]
+            geolocateURL = "https://www.googleapis.com/geolocation/v1/geolocate?key=" + data['apikey']
     except Exception as e:
         print(str(e))
         sys.exit("Error when reading from Json.")
@@ -31,6 +36,9 @@ def connect() :
 
 # Prompt user for login type
 def login() :
+    response = requests.post(geolocateURL)
+    data = json.loads(response.text)
+    print(data)
     print("1. User Credentials")
     print("2. Facial Recognition")
     option = input("Select authentication method: ")
@@ -51,7 +59,7 @@ def loginresp(auth, cars) :
     if auth == 'Success' :
         print('Login Successful')
         time.sleep(1)
-        selectCar()
+        select_car()
     else : 
         print('Incorrect username or password')
         time.sleep(1)
@@ -70,12 +78,13 @@ def select_car() :
             print("Selected: " + car["Make"] + ' | ' + car["Type"])
             time.sleep(1)
             print("Car unlocked")
+            sioc.emit('carupdatestatus', [car['CarID'], 'Rented'])
             # Send selected car status to Master
         else:
             raise ValueError
     except ValueError:
         print("Not a valid selection")
-        selectCar()
+        select_car()
 
 def wait_for_user_input() :
     global looping
@@ -86,8 +95,9 @@ def location_update() :
     # Prompt user to do something to logout
     print("Press enter to lock car")
     th.Thread(target=wait_for_user_input, args=(), name='wait_for_user_input', daemon=True).start()
-    while loop:
+    while looping:
         # Google map check every 30 seconds
+        print("emit event")
 
     # Send car status to Master on logout
 
