@@ -27,15 +27,17 @@ class Car(db.Model):
     Color = db.Column(db.Text)
     Seats = db.Column(db.Text)
     CostPerHour = db.Column(db.Text)
+    Status = db.Column(db.Text)
 
-    def __init__(self, Make, Type, Location, Color, Seats, CostPerHour, CarID=None):
+    def __init__(self, Make, Type, Location, Color, Seats,Status, CostPerHour, CarID=None):
         self.CarID = CarID
         self.Make = Make
         self.Type = Type
         self.Location = Location
         self.Color = Color
         self.Seats = Seats
-        self.CostPerHour = CostPerHour
+        self.CostPerHour = CostPerHour,
+        self.Status = Status
 
 
 class User(db.Model):
@@ -104,7 +106,7 @@ class CarSchema(ma.Schema):
         super().__init__(**kwargs)
 
     class Meta:
-        fields = ("CarID", "Make", "Type", "Location", "Color", "Seats", "CostPerHour")
+        fields = ("CarID", "Make", "Type", "Location", "Color", "Seats", "CostPerHour","Status")
 
 
 carsSchema = CarSchema()
@@ -184,6 +186,24 @@ bookingDetailsSchema = BookingDetailsSchema(many=True)
 def getCars():
     cars = Car.query.all()
     result = carsSchema.dump(cars)
+    return jsonify(result)
+
+@api.route("/updatecarlocation", methods=["POST"])
+def updateCarLocation():
+    data = request.get_json(force=True)
+    car = Car.query.filter(Car.CarID == data["id"])
+    car[0].Location = data["location"]
+    db.session.commit()
+    result = carsSchema.dump(car)
+    return jsonify(result)
+
+@api.route("/updatecarstatus", methods=["POST"])
+def updateCarStatus():
+    data = request.get_json(force=True)
+    car = Car.query.filter(Car.CarID == data["id"])
+    car[0].Status = data["status"]
+    db.session.commit()
+    result = carsSchema.dump(car)
     return jsonify(result)
 
 
