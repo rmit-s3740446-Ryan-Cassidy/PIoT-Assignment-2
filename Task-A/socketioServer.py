@@ -22,12 +22,12 @@ def handle_usercred(message):
         return 'Fail', cars
 
 @sios.on('faceregauth')
-def handle_facecred(message):
+def handle_facereg(message):
     cars = []
     print('recieved face recognition auth: ')
     names = recognize(message)
     existsResponse = requests.post(request.host_url + "/users" + names[0])
-    exists = json.loads(usersResponse.text)
+    exists = json.loads(existsResponse.text)
     if exists['message'] == "True":
         carResponse = requests.post(request.host_url + "/bookingsByUserAndDate/" + names[0])
         cars = json.loads(carResponse.text)
