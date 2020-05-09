@@ -234,6 +234,15 @@ def getUsers():
     result = usersSchema.dump(users)
     return jsonify(result)
 
+@api.route("/users/<username>", methods=["GET"])
+def user_exists(username):
+    print(username)
+    user = User.query.filter_by(UserName=username).first()
+    if user:
+        return jsonify({"message": "True"})
+    else:
+        return jsonify({"message": "False"})
+
 
 @api.route("/logins", methods=["GET"])
 def getLogins():

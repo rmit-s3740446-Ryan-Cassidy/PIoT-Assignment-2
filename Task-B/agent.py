@@ -5,6 +5,8 @@ import threading
 import time
 import requests
 import threading as th
+import os.path
+from PIL import Image
 from socketioClient import sioc, auth, carList
 
 ip = None
@@ -33,6 +35,10 @@ def connect() :
     sioc.connect(ip)
     print('my sid is', sioc.sid)
 
+def get_image() :
+    image = Image.open("image.jpg")
+    return image
+
 
 # Prompt user for login type
 def login() :
@@ -49,8 +55,19 @@ def login() :
     # Send user credential authentication attempt to Master
         sioc.emit('usercredauth', [email, password], callback = loginresp)
     # Facial Recognition Login
+    elif option == "2":
+        # Detect image
+        if os.path.exists("image.jpg"):
+            image = get_image()
+            sioc.emit('faceregauth', image, callback = loginresp)
+        else :
+            print("No image found. Please place a selfie image labeled image.jpg in the directory")
+            time.sleep(1)
+            login()
     else :
-        exit("Other options NYI")
+        print("Please choose an option")
+        time.sleep(1)
+        login()
 
 def loginresp(auth, cars) :
     global carList
