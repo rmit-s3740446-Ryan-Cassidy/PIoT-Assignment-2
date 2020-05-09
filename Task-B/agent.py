@@ -14,6 +14,7 @@ carList = None
 car = None
 looping = True
 geolocateURL = None
+login_type = True
 
 
 def load_config() :
@@ -42,6 +43,7 @@ def get_image() :
 
 # Prompt user for login type
 def login() :
+    global login_type
     response = requests.post(geolocateURL)
     data = json.loads(response.text)
     print(data)
@@ -53,12 +55,14 @@ def login() :
         email = input('Please enter email: ')
         password = input('Please enter password: ')
     # Send user credential authentication attempt to Master
+        login_type = True 
         sioc.emit('usercredauth', [email, password], callback = loginresp)
     # Facial Recognition Login
     elif option == "2":
         # Detect image
         if os.path.exists("image.jpg"):
             image = get_image()
+            login_type = False
             sioc.emit('faceregauth', image, callback = loginresp)
         else :
             print("No image found. Please place a selfie image labeled image.jpg in the directory")
@@ -78,7 +82,10 @@ def loginresp(auth, cars) :
         time.sleep(1)
         select_car()
     else : 
-        print('Incorrect username or password')
+        if login_type :
+            print('Incorrect username or password')
+        else:
+            print('Facial Recognition failed')
         time.sleep(1)
         login()
 
