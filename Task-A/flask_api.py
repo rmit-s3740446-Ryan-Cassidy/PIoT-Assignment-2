@@ -63,7 +63,6 @@ class Login(db.Model):
     LoginID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     UserName = db.Column(db.Text)
     Password = db.Column(db.Text)
-    FREncoding = db.Column(db.Binary)
 
     def __init__(self, Password, UserName, LoginID=None):
         self.LoginID = LoginID
@@ -131,7 +130,7 @@ class LoginSchema(ma.Schema):
         super().__init__(**kwargs)
 
     class Meta:
-        fields = ("LoginID", "UserName", "Password", "FREncoding")
+        fields = ("LoginID", "UserName", "Password")
 
 
 loginSchema = LoginSchema()
@@ -407,15 +406,6 @@ def addBooking():
         UserName=username,
     )
     db.session.add(newBooking)
-    db.session.commit()
-    return jsonify({"message": "Success"})
-
-@api.route("/addfrencoding", methods=['POST'])
-def addFREncoding():
-    data = request.data["username"]
-    encoding = request.files['encoding']
-    login = Login.filter_by(UserName=data["username"])
-    login.FREncoding = encoding
     db.session.commit()
     return jsonify({"message": "Success"})
 
