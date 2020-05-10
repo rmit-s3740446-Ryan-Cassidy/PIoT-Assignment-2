@@ -97,9 +97,12 @@ cars = [
 @site.route("/")
 @site.route("/home")
 def home():
-    # session.pop('username')
     return render_template("home.html")
 
+@site.route("/logout")
+def logout():
+    session.pop('username')
+    return redirect(url_for("site.home"))
 
 @site.route("/register", methods=["GET", "POST"])
 def register():
@@ -109,11 +112,11 @@ def register():
         response = requests.post(request.host_url + "/registerUser", json=userRegistrationData)
         data = json.loads(response.text)
         if data["message"] == "Success":
+            flash(f"Account created for {form.username.data}!!", "success")
             form.firstname.data = ""
             form.lastname.data = ""
             form.username.data = ""
             form.email.data = ""
-            flash(f"Account created for {form.username.data}!", "success")
         else:
             flash(data["message"], "danger")
     return render_template("register.html", title="Register", form=form)
@@ -139,9 +142,8 @@ def login():
 def dashboard():
     return render_template("dashboard.html", title="Dashboard")
 
-@site.route("/booking/", defaults={"name": "Person"}, methods=["GET", "POST"])
-@site.route("/booking/<name>", methods=["GET", "POST"])
-def booking(name):
+@site.route("/booking", methods=["GET", "POST"])
+def booking():
     form = CarsFilterForm()
     response = requests.get(
         request.host_url + "/car/" + form.make.data + "/" + form.seats.data
