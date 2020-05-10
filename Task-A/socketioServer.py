@@ -6,6 +6,12 @@ from recognize_face import recognize
 
 sios = SocketIO()
 
+# Reset agent event
+@sios.on('reset')
+def handle_reset():
+    return
+
+# User credential authentication event
 @sios.on('usercredauth')
 def handle_usercred(message):
     cars = []
@@ -17,32 +23,32 @@ def handle_usercred(message):
     if authData['message'] == 'Success':
         carResponse = requests.post(request.host_url + "/bookingsByUserAndDate/" + message[0])
         cars = json.loads(carResponse.text)
-        return 'Success', cars
+        return 'Success', message[0], cars
     else:
-        return 'Fail', cars
+        return 'Fail', message[0], cars
 
-@sios.on('faceregauth')
-def handle_facereg(message):
+#Face recognition event
+@sios.on('facerecauth')
+def handle_facerec(message):
     cars = []
-    print('recieved face recognition auth: ')
+    print('recieved face recognition auth')
     names = recognize(message)
-    existsResponse = requests.post(request.host_url + "/users" + names[0])
+    existsResponse = requests.post(request.host_url + "/users/" + names[0])
     exists = json.loads(existsResponse.text)
     if exists['message'] == "True":
         carResponse = requests.post(request.host_url + "/bookingsByUserAndDate/" + names[0])
         cars = json.loads(carResponse.text)
-        return 'Success', cars
+        return 'Success', names[0], cars
     else:
-        return 'Fail', cars
+        return 'Fail', names[0], cars
 
-
-
-
+# Update Car status event
 @sios.on('carupdatestatus')
 def handle_carupdatestatus(message):
     print('received updated car status')
     print(message)
 
+# Update Car location event
 @sios.on('carupdatelocation')
 def handle_carupdatelocation(message):
     print('received updated car location')

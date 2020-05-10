@@ -234,7 +234,7 @@ def getUsers():
     result = usersSchema.dump(users)
     return jsonify(result)
 
-@api.route("/users/<username>", methods=["GET"])
+@api.route("/users/<username>", methods=["POST"])
 def user_exists(username):
     print(username)
     user = User.query.filter_by(UserName=username).first()

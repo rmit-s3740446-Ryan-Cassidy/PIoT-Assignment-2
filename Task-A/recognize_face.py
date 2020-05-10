@@ -1,6 +1,8 @@
 import face_recognition
 import pickle
 import cv2
+import base64
+import io
 from PIL import Image
 import numpy as np
 
@@ -15,6 +17,11 @@ encodings = open("encodings.pickle", 'rb').read()
 # Pass a Pillow opened image object
 def recognize(image):
     global encodings
+
+    # Decode string into image
+    if isinstance(image, bytes):
+        imgdata = io.BytesIO(base64.b64decode(image))
+        image = Image.open(imgdata)
 
     # load the known faces and embeddings
     data = pickle.loads(encodings)
