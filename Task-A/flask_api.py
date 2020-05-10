@@ -207,11 +207,12 @@ def updateCarStatus():
     return jsonify(result)
 
 
-@api.route("/car/<make>/<seats>", methods=["GET"])
-def getFilteredCars(make, seats):
+@api.route("/car/<make>/<seats>/<price>", methods=["GET"])
+def getFilteredCars(make, seats,price):
     cars = Car.query.all()
     filteredByMake = []
     filteredBySeats = []
+    filteredByCost = []
     if make != "All makes":
         for car in cars:
             if car.Make == make:
@@ -224,7 +225,13 @@ def getFilteredCars(make, seats):
                 filteredBySeats.append(car)
     else:
         filteredBySeats = filteredByMake
-    result = carsSchema.dump(filteredBySeats)
+    if price != "All prices":
+        for car in filteredBySeats:
+            if car.CostPerHour == price:
+                filteredByCost.append(car)
+    else:
+        filteredByCost = filteredBySeats
+    result = carsSchema.dump(filteredByCost)
     return jsonify(result)
 
 

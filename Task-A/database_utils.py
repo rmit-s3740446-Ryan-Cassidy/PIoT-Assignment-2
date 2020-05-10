@@ -66,9 +66,9 @@ class DatabaseUtils:
                 constraint PK_Car primary key (LoginID)
                 )"""
             )
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','3073','Red','6','20','Available')")
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','3074','Blue','7','20','Available')")
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Civic','Sedan','3075','Red','6','20','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','3073','Red','6','10','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','3074','Blue','7','10','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Civic','Sedan','3075','Red','6','10','Available')")
             # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Civic','Sedan','3076','Blue','7','20','Available')")
             # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','3077','Red','6','20','Available')")
             # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','3076','Blue','7','20','Available')")
