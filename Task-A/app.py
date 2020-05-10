@@ -146,7 +146,7 @@ def dashboard():
 def booking():
     form = CarsFilterForm()
     response = requests.get(
-        request.host_url + "/car/" + form.make.data + "/" + form.seats.data
+        request.host_url + "/car/" + form.make.data + "/" + form.seats.data + "/" + form.price.data
     )
     data = json.loads(response.text)
     return render_template("booking.html", cars=data, form=form)

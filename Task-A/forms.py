@@ -39,6 +39,11 @@ class CarsFilterForm(FlaskForm):
         choices = [('All seats', 'All seats'),('6', '6'), ('7', '7')], default='All seats'
         
     )
+    price = SelectField(
+        u'Filter By Cost/Hr:',
+        choices = [('All prices', 'All prices'),('10', '10'), ('20', '20')], default='All prices'
+        
+    )
     submit = SubmitField("Filter")
 
 
