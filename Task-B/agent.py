@@ -8,7 +8,7 @@ import threading as th
 import os.path
 import base64
 from os import system, name
-from pil import Image
+from PIL import Image
 from socketioClient import sioc, auth, carList
 
 ip = None
