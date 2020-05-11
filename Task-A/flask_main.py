@@ -7,11 +7,13 @@ from app import site
 import MySQLdb
 from database_utils import DatabaseUtils
 from socketioServer import sios
+import eventlet
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 basedir = os.path.abspath(os.path.dirname(__file__))
+eventlet.monkey_patch()
 
 HOST = "35.244.74.229"
 USER = "root"
@@ -33,5 +35,5 @@ sios.init_app(app)
 if __name__ == "__main__":
     with DatabaseUtils() as db:
         db.createTables()
-    #sios.run(app, host = "192.168.1.225", debug=True)
-    app.run(host="0.0.0.0", debug=True)
+    sios.run(app, host = "192.168.1.225", debug=True)
+    #app.run(host="192.168.1.225", debug=True)
