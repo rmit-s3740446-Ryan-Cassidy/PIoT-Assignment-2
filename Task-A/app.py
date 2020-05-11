@@ -177,13 +177,8 @@ def bookingDetails(carId):
 @site.route("/bookingsByUser", methods=["GET", "POST"])
 def bookingsByUser():
     response = requests.post(
-        "http://127.0.0.1:5000/bookingsByUser/" + session["username"]
+        request.host_url + "/bookingsByUser/" + session["username"]
     )
     data = json.loads(response.text)
     return render_template("bookingsByUser.html", title ="Booking History", data=data, now=date.today().isoformat())
-
-
-1
-2
-3
 

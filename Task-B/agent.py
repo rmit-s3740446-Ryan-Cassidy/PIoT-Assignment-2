@@ -8,7 +8,7 @@ import threading as th
 import os.path
 import base64
 from os import system, name
-from PIL import Image
+from pil import Image
 from socketioClient import sioc, auth, carList
 
 ip = None
@@ -36,7 +36,7 @@ def clear() :
     if name == 'nt': 
         _ = system('cls') 
   
-    # for mac and linux(here, os.name is 'posix') 
+    # for mac and linux
     else: 
         _ = system('clear') 
 
@@ -120,7 +120,7 @@ def select_car(car_list) :
             print("Selected: " + car["Make"] + ' | ' + car["Type"])
             time.sleep(2)
             print("Car unlocked")
-            sioc.emit('carupdatestatus', [car['CarID'], 'Rented'])
+            sioc.emit('carupdatestatus', [car['CarID'], 'Rented'], callback = location_update)
             # Send selected car status to Master
         else:
             raise ValueError
@@ -135,13 +135,17 @@ def wait_for_user_input() :
 
 def location_update() :
     # Prompt user to do something to logout
-    print("Press enter to lock car")
+    print("Press enter to return car")
     th.Thread(target=wait_for_user_input, args=(), name='wait_for_user_input', daemon=True).start()
     while looping:
         # Google map check every 30 seconds
-        print("emit event")
-
-    # Send car status to Master on logout
+        response = requests.post(geolocateURL)
+        data = json.loads(response.text)
+        sioc.emit('carupdatelocation', [car['CarID'], data])
+        time.sleep(30)
+        # Send car status to Master on return, reset back to login
+    print("Car returned, returning to login")
+    sioc.emit('carupdatestatus', [car['CarID'], 'Available'], callback = login)
 
 if __name__ == "__main__":
     load_config()
