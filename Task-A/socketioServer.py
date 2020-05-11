@@ -46,10 +46,12 @@ def handle_facerec(message):
 @sios.on('carupdatestatus')
 def handle_carupdatestatus(message):
     print('received updated car status')
-    print(message)
+    statusjson = {'id': message[0], 'status': message[1]}
+    requests.post(request.host_url + "/updatecarstatus", json=statusjson)
 
 # Update Car location event
 @sios.on('carupdatelocation')
 def handle_carupdatelocation(message):
     print('received updated car location')
-    print(message)
+    locationjson = {'id': message[0], 'location': message[1]}
+    requests.post(request.host_url + "/updatecarlocation", json=locationjson)
