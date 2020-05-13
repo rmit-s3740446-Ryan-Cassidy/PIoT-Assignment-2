@@ -8,6 +8,7 @@ from flask import (
     request,
     jsonify,
     session,
+    Respose
 )
 from forms import RegistrationForm, LoginForm, BookingForm, CarsFilterForm
 from passlib.hash import sha256_crypt
@@ -17,8 +18,14 @@ from flask_marshmallow import Marshmallow
 import os, requests, json
 from json import JSONEncoder
 import datetime
-from datetime import date, time 
+from datetime import date, time
+from google_auth_oauthlib.flow import Flow
+from googleapiclient.discovery import build
 
+# We only need calendar.events scope since we are just managing events in user's calendar
+SCOPES = ['https://www.googleapis.com/auth/calendar.events']
+CLIENT_SECRETS_FILE = "client_secret.json"
+flow = Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
 
 class DateTimeEncoder(JSONEncoder):
     def default(self, obj):
@@ -99,10 +106,12 @@ cars = [
 def home():
     return render_template("home.html")
 
+
 @site.route("/logout")
 def logout():
-    session.pop('username')
-    return redirect(url_for("site.home"))
+    flask.session.pop('username')
+    return flask.redirect(flask.url_for("site.home"))
+
 
 @site.route("/register", methods=["GET", "POST"])
 def register():
@@ -180,5 +189,88 @@ def bookingsByUser():
         request.host_url + "/bookingsByUser/" + session["username"]
     )
     data = json.loads(response.text)
-    return render_template("bookingsByUser.html", title ="Booking History", data=data, now=date.today().isoformat())
+    return flask.render_template("bookingsByUser.html", title="Booking History", data=data, now=date.today().isoformat())
 
+
+@site.route("/addEvent", methods=["GET", "POST"])
+def addEvent():
+    d = flask.request.get_json(force=True)
+    data = json.loads(d, cls=json.JSONDecoder)
+
+    # Event attributes to be loaded from json
+    title = data['title']
+    location = data['location']
+    description = data['description']
+    startTime = data['startTime']
+    endTime = data['endTime']
+    timeZone = 'Melbourne/Australia'
+
+    """Add event to primary google calendar of current user
+
+            Arguments:
+            title {[str]} -- [title of the event]
+            location {[str]} -- [location of event]
+            desc {[str]} -- [description of event]
+            startTime {[str]} -- [even start time in format date-time = full-date "T" full-time (eg. 2020-04-29T09:00:00-07:00)]
+            endTime {[str]} -- [event end time. Similar formatting to start time]
+            timeZone {[str]} -- [timezone for event - defaults to Melbourne/Australia]
+    """
+    if 'credentials' not in flask.session:
+            print("Error. credentials not found")
+            return flask.jsonify({"message": "error", "text": "Google Calendar not authorised!"})
+
+    service = build('calendar', 'v3',
+                        credentials=flask.session['credentials'])
+
+    event = {
+            'summary': title,
+            'location': location,
+            'description': description,
+            'start': {
+                'dateTime': startTime,
+                'timeZone': timeZone,
+            },
+            'end': {
+                'dateTime': endTime,
+                'timeZone': timeZone,
+            },
+        }
+
+    event = service.events().insert(calendarId='primary', body=event).execute()
+    print('Event created: {}'.format(event.get('htmlLink')))
+    return flask.jsonify({"message": "Success", "text": "Event created"})
+
+@site.route("/oauth2callback")
+def oauth2callback():
+    # Use the authorization server's response to fetch the OAuth 2.0 tokens.
+    authorization_response = flask.request.url
+    if 'error' in authorization_response:
+        return flask.redirect(flask.url_for('site.dashboard'))
+
+    flow.fetch_token(authorization_response=authorization_response)
+    creds = flow.credentials
+    flask.session['credentials'] = credentials_to_dict(creds)
+    Flask.save_session(session=flask.session)
+    flask.flash("Gcal authenticated.", 'success')
+    return flask.redirect(flask.url_for('site.dashboard'))
+
+@site.route("/authorize")
+def authorize():
+    flow.redirect_uri = flask.url_for('site.oauth2callback', _external=True)
+
+    authorization_url, state = flow.authorization_url(
+        # Enable offline access so that you can refresh an access token without
+        # re-prompting the user for permission. Recommended for web server apps.
+        access_type='offline',
+        # Enable incremental authorization. Recommended as a best practice.
+        include_granted_scopes='true')
+    return flask.redirect(authorization_url)
+
+
+def credentials_to_dict(credentials):
+    return {'token': credentials.token,
+            'refresh_token': credentials.refresh_token,
+            'token_uri': credentials.token_uri,
+            'client_id': credentials.client_id,
+            'client_secret': credentials.client_secret,
+            'scopes': credentials.scopes}

@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
 from flask import current_app as app
-import sys
+import sys, flask
 from passlib.hash import sha256_crypt
 from datetime import datetime, date, time
 from json import JSONDecoder
@@ -182,11 +182,19 @@ bookingDetailsSchema = BookingDetailsSchema()
 bookingDetailsSchema = BookingDetailsSchema(many=True)
 
 
-@api.route("/car", methods=["GET"])
-def getCars():
+
+@api.route("/car", defaults={'id':'all'}, methods=["GET"])
+@api.route("/car/<id>")
+def getCars(id):
     cars = Car.query.all()
-    result = carsSchema.dump(cars)
-    return jsonify(result)
+    if 'all' in id:
+        result = carsSchema.dump(cars)
+        return jsonify(result)
+    else:
+        for car in cars:
+            if car.CarID == int(id):
+                result = CarSchema().dump(car)
+                return (result)
 
 @api.route("/updatecarlocation", methods=["POST"])
 def updateCarLocation():
@@ -421,8 +429,27 @@ def addBooking():
         CarID=carID,
         UserName=username,
     )
-    db.session.add(newBooking)
-    db.session.commit()
-    return jsonify({"message": "Success"})
 
-
+    #Create calendar event
+    carInfo = getCars(carID)
+    location = carInfo['Location']
+    carDesc = carInfo['Make'] + " (" + carInfo['Seats'] + " seater " + carInfo['Color'] + " " + carInfo['Type'] + ")"
+    startTime = dataOne['pickUpDate'] + "T" + pickUpTime
+    endTime = dataOne['returnDate'] + "T" + returnTime
+    data = {
+        "title":'Car Booking', 
+        "location":location, 
+        "description":carDesc, 
+        "startTime":startTime, 
+        "endTime":endTime
+        }
+    data = json.dumps(data)
+    event = requests.get(request.host_url + "/addEvent", json=data)
+    event_response = json.loads(event.text)
+    if 'error' in event_response['message']:
+        return jsonify({"message":event_response['text']})
+    else:
+        #Commit booking to db
+        db.session.add(newBooking)
+        db.session.commit()
+        return jsonify({"message": "Success"})
