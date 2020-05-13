@@ -33,7 +33,7 @@ class DateTimeEncoder(JSONEncoder):
             return obj.isoformat()
 
 
-site = Blueprint("site", __name__)
+site = flask.Blueprint("site", __name__)
 cars = [
     {
         "id": "1",
@@ -104,7 +104,12 @@ cars = [
 @site.route("/")
 @site.route("/home")
 def home():
-    return render_template("home.html")
+    return flask.render_template("home.html")
+
+@site.route("/logout")
+def logout():
+        flask.session.pop('username')
+        return flask.redirect(flask.url_for("site.home"))
 
 
 @site.route("/logout")
@@ -118,7 +123,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         userRegistrationData = {"firstname":form.firstname.data, "lastname":form.lastname.data, "username":form.username.data, "email":form.email.data, "password":sha256_crypt.hash(form.password.data)}
-        response = requests.post(request.host_url + "/registerUser", json=userRegistrationData)
+        response = requests.post(flask.request.host_url + "/registerUser", json=userRegistrationData)
         data = json.loads(response.text)
         if data["message"] == "Success":
             flash(f"Account created for {form.username.data}!!", "success")
@@ -127,8 +132,8 @@ def register():
             form.username.data = ""
             form.email.data = ""
         else:
-            flash(data["message"], "danger")
-    return render_template("register.html", title="Register", form=form)
+            flask.flash(data["message"], "danger")
+    return flask.render_template("register.html", title="Register", form=form)
 
 
 @site.route("/login", methods=["GET", "POST"])
@@ -136,20 +141,45 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         userLoginData = {"username":form.username.data, "password":form.password.data}
-        response = requests.post(request.host_url + "/loginUser", json=userLoginData)
+        response = requests.post(flask.request.host_url + "/loginUser", json=userLoginData)
         data = json.loads(response.text)
         if data["message"] == "Success":
-            session["username"] = form.username.data
-            return redirect(url_for("site.dashboard"))
+            flask.session["username"] = form.username.data
+            return flask.redirect(flask.url_for("site.dashboard"))
         else:
-            flash(data["message"], "danger")
+            flask.flash(data["message"], "danger")
             form.username.data = ""
-    return render_template("login.html", title="Login", form=form)
+    return flask.render_template("login.html", title="Login", form=form)
 
 
 @site.route("/dashboard/")
 def dashboard():
-    return render_template("dashboard.html", title="Dashboard")
+    if 'credentials' not in flask.session:
+        flask.flash("Google calendar permission not authorised. Redirecting...")
+        return flask.redirect(flask.url_for('site.authorize'))
+    return flask.render_template("dashboard.html", title="Dashboard")
+
+@site.route("/oauth2callback")
+def oauth2callback():
+    flow = GCal.flow
+    flow.redirect_uri = flask.url_for('site.oauth2callback', _external=True)
+
+    # Use the authorization server's response to fetch the OAuth 2.0 tokens.
+    authorization_response = flask.request.url
+    flow.fetch_token(authorization_response=authorization_response)
+    creds = flow.credentials
+    flask.session['credentials'] = credentials_to_dict(creds)
+    flask.flash("GCal authorization successful.")
+    return flask.redirect(flask.url_for('site.dashboard'))
+
+@site.route("/authorize")
+def authorize():
+    return GCal().auth_gcal()
+
+@site.route("/clear")
+def clear_credentials():
+    flask.session.clear()
+    return flask.make_response('GCal credentials cleared.', 200)
 
 @site.route("/booking", methods=["GET", "POST"])
 def booking():
@@ -158,7 +188,7 @@ def booking():
         request.host_url + "/car/" + form.make.data + "/" + form.seats.data + "/" + form.price.data
     )
     data = json.loads(response.text)
-    return render_template("booking.html", cars=data, form=form)
+    return flask.render_template("booking.html", cars=data, form=form)
 
 
 @site.route("/bookingDetails/<carId>", methods=["GET", "POST"])
@@ -171,16 +201,16 @@ def bookingDetails(carId):
             "returnDate": form.return_date.data,
             "returnTime": form.return_time.data,
             "carID": carId,
-            "username": session["username"],
+            "username": flask.session["username"],
         }
         userBookingJSONData = json.dumps(userBookingData, cls=DateTimeEncoder)
-        response = requests.post(request.host_url + "/bookingDetails", json=userBookingJSONData)
+        response = requests.post(flask.request.host_url + "/bookingDetails", json=userBookingJSONData)
         data = json.loads(response.text)
         if data["message"] == "Success":
-            flash(data["message"], "success")
+            flask.flash(data["message"], "success")
         else:
-            flash(data["message"], "danger")
-    return render_template("bookingDetails.html", form=form)
+            flask.flash(data["message"], "danger")
+    return flask.render_template("bookingDetails.html", form=form)
 
 
 @site.route("/bookingsByUser", methods=["GET", "POST"])
