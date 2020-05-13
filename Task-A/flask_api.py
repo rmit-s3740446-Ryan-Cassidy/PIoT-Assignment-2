@@ -48,6 +48,7 @@ class User(db.Model):
     UserName = db.Column(db.Text)
     Email = db.Column(db.Text)
     Role = db.Column(db.Text)
+    credentials = db.Column(db.JSON)
 
     def __init__(self, FirstName, LastName, UserName, Email, Role, UserID=None):
         self.UserID = UserID
@@ -437,6 +438,7 @@ def addBooking():
     startTime = dataOne['pickUpDate'] + "T" + pickUpTime
     endTime = dataOne['returnDate'] + "T" + returnTime
     data = {
+        'username': username,
         "title":'Car Booking', 
         "location":location, 
         "description":carDesc, 
@@ -444,6 +446,7 @@ def addBooking():
         "endTime":endTime
         }
     data = json.dumps(data)
+
     event = requests.get(request.host_url + "/addEvent", json=data)
     event_response = json.loads(event.text)
     if 'error' in event_response['message']:

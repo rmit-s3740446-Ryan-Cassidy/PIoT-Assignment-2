@@ -8,8 +8,9 @@ from flask import (
     request,
     jsonify,
     session,
-    Respose
+    Response
 )
+import flask
 from forms import RegistrationForm, LoginForm, BookingForm, CarsFilterForm
 from passlib.hash import sha256_crypt
 import sys
@@ -21,6 +22,8 @@ import datetime
 from datetime import date, time
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
+import google.oauth2.credentials
+from flask_api import User, db
 
 # We only need calendar.events scope since we are just managing events in user's calendar
 SCOPES = ['https://www.googleapis.com/auth/calendar.events']
@@ -112,12 +115,6 @@ def logout():
         return flask.redirect(flask.url_for("site.home"))
 
 
-@site.route("/logout")
-def logout():
-    flask.session.pop('username')
-    return flask.redirect(flask.url_for("site.home"))
-
-
 @site.route("/register", methods=["GET", "POST"])
 def register():
     form = RegistrationForm()
@@ -158,23 +155,6 @@ def dashboard():
         flask.flash("Google calendar permission not authorised. Redirecting...")
         return flask.redirect(flask.url_for('site.authorize'))
     return flask.render_template("dashboard.html", title="Dashboard")
-
-@site.route("/oauth2callback")
-def oauth2callback():
-    flow = GCal.flow
-    flow.redirect_uri = flask.url_for('site.oauth2callback', _external=True)
-
-    # Use the authorization server's response to fetch the OAuth 2.0 tokens.
-    authorization_response = flask.request.url
-    flow.fetch_token(authorization_response=authorization_response)
-    creds = flow.credentials
-    flask.session['credentials'] = credentials_to_dict(creds)
-    flask.flash("GCal authorization successful.")
-    return flask.redirect(flask.url_for('site.dashboard'))
-
-@site.route("/authorize")
-def authorize():
-    return GCal().auth_gcal()
 
 @site.route("/clear")
 def clear_credentials():
@@ -228,12 +208,13 @@ def addEvent():
     data = json.loads(d, cls=json.JSONDecoder)
 
     # Event attributes to be loaded from json
+    username = data['username']
     title = data['title']
     location = data['location']
     description = data['description']
     startTime = data['startTime']
     endTime = data['endTime']
-    timeZone = 'Melbourne/Australia'
+    timeZone = 'Australia/Melbourne'
 
     """Add event to primary google calendar of current user
 
@@ -243,26 +224,28 @@ def addEvent():
             desc {[str]} -- [description of event]
             startTime {[str]} -- [even start time in format date-time = full-date "T" full-time (eg. 2020-04-29T09:00:00-07:00)]
             endTime {[str]} -- [event end time. Similar formatting to start time]
-            timeZone {[str]} -- [timezone for event - defaults to Melbourne/Australia]
+            timeZone {[str]} -- [IANA timezone for event - defaults to Australia/Melbourne]
     """
-    if 'credentials' not in flask.session:
+    creds = User.query.filter_by(UserName=username).first().credentials
+    if not creds:
             print("Error. credentials not found")
             return flask.jsonify({"message": "error", "text": "Google Calendar not authorised!"})
 
+    credentials = google.oauth2.credentials.Credentials(**creds)
     service = build('calendar', 'v3',
-                        credentials=flask.session['credentials'])
+                        credentials=credentials)
 
     event = {
             'summary': title,
             'location': location,
             'description': description,
             'start': {
-                'dateTime': startTime,
                 'timeZone': timeZone,
+                'dateTime': startTime       
             },
             'end': {
-                'dateTime': endTime,
                 'timeZone': timeZone,
+                'dateTime': endTime
             },
         }
 
@@ -279,8 +262,11 @@ def oauth2callback():
 
     flow.fetch_token(authorization_response=authorization_response)
     creds = flow.credentials
-    flask.session['credentials'] = credentials_to_dict(creds)
-    Flask.save_session(session=flask.session)
+    
+    user = User.query.filter_by(UserName=flask.session['username']).first()
+    user.credentials = credentials_to_dict(creds)
+    db.session.commit()
+
     flask.flash("Gcal authenticated.", 'success')
     return flask.redirect(flask.url_for('site.dashboard'))
 
