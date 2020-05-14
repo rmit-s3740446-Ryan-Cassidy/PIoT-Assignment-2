@@ -11,6 +11,8 @@ from json import JSONDecoder
 import datetime
 from datetime import timedelta
 from datetime import date, time 
+import google.oauth2.credentials
+from googleapiclient.discovery import build
 
 api = Blueprint("api", __name__)
 
@@ -80,6 +82,7 @@ class Booking(db.Model):
     ReturnTime = db.Column(db.Time)
     CarID = db.Column(db.Integer)
     UserName = db.Column(db.Text)
+    eventId = db.Column(db.Text)
     # TotalCost = db.Column(db.Text)
 
     def __init__(
@@ -386,8 +389,23 @@ def checkLogin():
 @api.route("/cancelBooking/<bookingId>", methods = ["GET", "POST"])
 def cancelBooking(bookingId):
     cancel = Booking.query.filter_by(BookingID = bookingId).one()
-    db.session.delete(cancel)
-    db.session.commit()
+    # Delete calendar event associated with this booking.
+    eventId = cancel.eventId
+    user_creds = User.query.filter_by(UserName=cancel.UserName).first().credentials
+
+    if not user_creds:
+        flask.flash("Google calendar not authorised by user!", "danger")
+        return redirect(url_for("site.bookingsByUser"))
+
+    credentials = google.oauth2.credentials.Credentials(**user_creds)
+    service = build('calendar', 'v3', credentials=credentials)
+    try:
+        service.events().delete(calendarId='primary', eventId=eventId).execute()
+        db.session.delete(cancel)
+        db.session.commit()
+    except:
+        flask.flash('Unable to delete booking')
+
     return redirect(url_for("site.bookingsByUser"))
 
 @api.route("/bookingDetails", methods=["GET", "POST"])
@@ -453,6 +471,8 @@ def addBooking():
         return jsonify({"message":event_response['text']})
     else:
         #Commit booking to db
+        eventId = event_response['eventId']
+        newBooking.eventId = eventId
         db.session.add(newBooking)
         db.session.commit()
         return jsonify({"message": "Success"})
