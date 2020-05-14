@@ -28,7 +28,6 @@ from flask_api import User, db
 # We only need calendar.events scope since we are just managing events in user's calendar
 SCOPES = ['https://www.googleapis.com/auth/calendar.events']
 CLIENT_SECRETS_FILE = "client_secret.json"
-flow = Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
 
 class DateTimeEncoder(JSONEncoder):
     def default(self, obj):
@@ -151,15 +150,11 @@ def login():
 
 @site.route("/dashboard/")
 def dashboard():
-    if 'credentials' not in flask.session:
+    if not User.query.filter_by(UserName=flask.session['username']).first().credentials:
         flask.flash("Google calendar permission not authorised. Redirecting...")
         return flask.redirect(flask.url_for('site.authorize'))
     return flask.render_template("dashboard.html", title="Dashboard")
 
-@site.route("/clear")
-def clear_credentials():
-    flask.session.clear()
-    return flask.make_response('GCal credentials cleared.', 200)
 
 @site.route("/booking", methods=["GET", "POST"])
 def booking():
@@ -248,13 +243,18 @@ def addEvent():
                 'dateTime': endTime
             },
         }
-
-    event = service.events().insert(calendarId='primary', body=event).execute()
-    print('Event created: {}'.format(event.get('htmlLink')))
-    return flask.jsonify({"message": "Success", "text": "Event created"})
+    try:
+        event = service.events().insert(calendarId='primary', body=event).execute()
+        id = event.get('id')
+        print('Event created: {}'.format(event.get('htmlLink')))
+        return flask.jsonify({"message": "Success", "text": "Event created", "eventId":id})
+    except:
+        return flask.jsonify({"message": "error", "text": "Error creating event!"})
 
 @site.route("/oauth2callback")
 def oauth2callback():
+    flow = Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
+    flow.redirect_uri = flask.url_for('site.oauth2callback', _external=True)
     # Use the authorization server's response to fetch the OAuth 2.0 tokens.
     authorization_response = flask.request.url
     if 'error' in authorization_response:
@@ -272,6 +272,7 @@ def oauth2callback():
 
 @site.route("/authorize")
 def authorize():
+    flow = Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
     flow.redirect_uri = flask.url_for('site.oauth2callback', _external=True)
 
     authorization_url, state = flow.authorization_url(
