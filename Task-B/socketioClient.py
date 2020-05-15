@@ -1,13 +1,8 @@
 import socketio
 
 sioc = socketio.Client()
-auth = False
-carList = []
 
 # Socket Events
-@sioc.event
-def message(data) :
-    print("I received a message!")
 
 @sioc.event
 def connect() :
