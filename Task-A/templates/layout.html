@@ -10,7 +10,7 @@
   </head>
 <body style="height: 100%;">
   <nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="#">Car Booking Application</a>
+    <a class="navbar-brand" href="{{ url_for('site.dashboard') }}">Car Booking Application</a>
     {% if session["username"] %}
     <div class="dropdown mr-5">
       <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

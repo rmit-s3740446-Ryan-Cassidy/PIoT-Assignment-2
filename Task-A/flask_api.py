@@ -4,13 +4,15 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
 from flask import current_app as app
-import sys
+import sys, flask
 from passlib.hash import sha256_crypt
 from datetime import datetime, date, time
 from json import JSONDecoder
 import datetime
 from datetime import timedelta
 from datetime import date, time 
+import google.oauth2.credentials
+from googleapiclient.discovery import build
 
 api = Blueprint("api", __name__)
 
@@ -48,6 +50,7 @@ class User(db.Model):
     UserName = db.Column(db.Text)
     Email = db.Column(db.Text)
     Role = db.Column(db.Text)
+    credentials = db.Column(db.JSON)
 
     def __init__(self, FirstName, LastName, UserName, Email, Role, UserID=None):
         self.UserID = UserID
@@ -79,6 +82,7 @@ class Booking(db.Model):
     ReturnTime = db.Column(db.Time)
     CarID = db.Column(db.Integer)
     UserName = db.Column(db.Text)
+    eventId = db.Column(db.Text)
     # TotalCost = db.Column(db.Text)
 
     def __init__(
@@ -182,11 +186,19 @@ bookingDetailsSchema = BookingDetailsSchema()
 bookingDetailsSchema = BookingDetailsSchema(many=True)
 
 
-@api.route("/car", methods=["GET"])
-def getCars():
+
+@api.route("/car", defaults={'id':'all'}, methods=["GET"])
+@api.route("/car/<id>")
+def getCars(id):
     cars = Car.query.all()
-    result = carsSchema.dump(cars)
-    return jsonify(result)
+    if 'all' in id:
+        result = carsSchema.dump(cars)
+        return jsonify(result)
+    else:
+        for car in cars:
+            if car.CarID == int(id):
+                result = CarSchema().dump(car)
+                return (result)
 
 @api.route("/updatecarlocation", methods=["POST"])
 def updateCarLocation():
@@ -377,8 +389,23 @@ def checkLogin():
 @api.route("/cancelBooking/<bookingId>", methods = ["GET", "POST"])
 def cancelBooking(bookingId):
     cancel = Booking.query.filter_by(BookingID = bookingId).one()
-    db.session.delete(cancel)
-    db.session.commit()
+    # Delete calendar event associated with this booking.
+    eventId = cancel.eventId
+    user_creds = User.query.filter_by(UserName=cancel.UserName).first().credentials
+
+    if not user_creds:
+        flask.flash("Google calendar not authorised by user!", "danger")
+        return redirect(url_for("site.bookingsByUser"))
+
+    credentials = google.oauth2.credentials.Credentials(**user_creds)
+    service = build('calendar', 'v3', credentials=credentials)
+    try:
+        service.events().delete(calendarId='primary', eventId=eventId).execute()
+        db.session.delete(cancel)
+        db.session.commit()
+    except:
+        flask.flash('Unable to delete booking')
+
     return redirect(url_for("site.bookingsByUser"))
 
 @api.route("/bookingDetails", methods=["GET", "POST"])
@@ -421,8 +448,31 @@ def addBooking():
         CarID=carID,
         UserName=username,
     )
-    db.session.add(newBooking)
-    db.session.commit()
-    return jsonify({"message": "Success"})
 
+    #Create calendar event
+    carInfo = getCars(carID)
+    location = carInfo['Location']
+    carDesc = carInfo['Make'] + " (" + carInfo['Seats'] + " seater " + carInfo['Color'] + " " + carInfo['Type'] + ")"
+    startTime = dataOne['pickUpDate'] + "T" + pickUpTime
+    endTime = dataOne['returnDate'] + "T" + returnTime
+    data = {
+        'username': username,
+        "title":'Car Booking', 
+        "location":location, 
+        "description":carDesc, 
+        "startTime":startTime, 
+        "endTime":endTime
+        }
+    data = json.dumps(data)
 
+    event = requests.get(request.host_url + "/addEvent", json=data)
+    event_response = json.loads(event.text)
+    if 'error' in event_response['message']:
+        return jsonify({"message":event_response['text']})
+    else:
+        #Commit booking to db
+        eventId = event_response['eventId']
+        newBooking.eventId = eventId
+        db.session.add(newBooking)
+        db.session.commit()
+        return jsonify({"message": "Success"})
