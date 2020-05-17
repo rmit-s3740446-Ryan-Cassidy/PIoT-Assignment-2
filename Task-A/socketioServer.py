@@ -79,3 +79,11 @@ def handle_facerectest(message):
         return 'Success'
     else:
         return 'Fail'
+
+#Event for testing receival of car location coordinates
+@sios.on('carupdatelocation', namespace='/test')
+def handle_carupdatelocationtest(message):
+    if 'location' in message:
+        return 'Success'
+    else:
+        return 'Fail'

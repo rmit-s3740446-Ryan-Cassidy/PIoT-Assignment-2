@@ -20,12 +20,13 @@ class Agent_Tests(unittest.TestCase):
             print(str(e))
             sys.exit("Error when reading from Json.")
     
+    #Convert image to base64 string
     def image_to_str(self, imagepath) :
         with open(imagepath, "rb") as image:
             b64str = base64.b64encode(image.read())
             return b64str
 
-    # Conntect to testing namespace
+    # Connect to testing namespace
     def connect(self) : 
         self.client.connect(self.ip, namespaces=['/test'])
 
@@ -41,9 +42,8 @@ class Agent_Tests(unittest.TestCase):
         self.client.disconnect()
         exit
     
-    # After Each
-    # def tearDown(self):
-    #     self.username = None
+    #Tests utilize thread-unsafe call method instead of emit as it is better suited for unit testing purposes
+    #Call is functionally the same as emit. Resumes method that called it when returning response from Master
     
     #Test connection to Master server by retrieving SID
     #SID is the ID assigned to a socket connection by Master
@@ -89,12 +89,16 @@ class Agent_Tests(unittest.TestCase):
         image = self.image_to_str("image.jpg")
         auth = self.client.call('facerecauth', image, namespace = '/test')
         self.assertTrue(auth == 'Success') #If image is matched with encoding, auth equals 'Success'
-    
+
+    #Agent function testing
+
     #Test Google Geolocation
     def test_Geolocation_API(self):
         response = requests.post(self.geolocateURL)
         data = json.loads(response.text)
         self.assertIn('location', data) #If API key is set and request is returned. Data will contain location
+        response = self.client.call('carupdatelocation', data, namespace = '/test')
+        self.assertTrue(response == 'Success') #If location update sent correctly, response requals 'Success'
 
 if __name__ == "__main__":
     unittest.main()

@@ -9,7 +9,7 @@ import os.path
 import base64
 from threading import Event
 from os import system, name
-from pil import Image
+from PIL import Image
 import socketio
 
 class agentClient:
@@ -83,10 +83,12 @@ class agentClient:
                 print("No image found. Please place a selfie image labeled image.jpg in the directory")
                 time.sleep(1)
                 self.sioc.emit('reset', callback = self.login)
+        #Close connection, close program
         elif option == "3":
             self.sioc.disconnect()
             sys.exit()
         else :
+            #Bad user input, redirect back to login
             print("Incorrect input, please choose an option")
             time.sleep(1)
             self.sioc.emit('reset', callback = self.login)
@@ -105,7 +107,8 @@ class agentClient:
                 self.sioc.emit('reset', callback = self.login)
             else:
                 self.select_car(car_list)
-        else : 
+        else :
+            #Failed login. Redirect back to login 
             if self.login_type :
                 print('Incorrect username or password')
             else:
@@ -125,14 +128,15 @@ class agentClient:
                 print("Selected: " + car["Make"] + ' | ' + car["Type"])
                 time.sleep(2)
                 print("Car unlocked")
-                self.sioc.emit('carupdatestatus', [car['CarID'], 'Rented'], callback = self.location_update)
                 # Send selected car status to Master
+                self.sioc.emit('carupdatestatus', [car['CarID'], 'Rented'], callback = self.location_update)
             else:
                 raise ValueError
         except ValueError:
             print("Not a valid selection")
             self.select_car(car_list)
 
+    #Method for looping until user presses enter
     def wait_for_user_input(self) :
         input()
         self.exit_loop.set()
