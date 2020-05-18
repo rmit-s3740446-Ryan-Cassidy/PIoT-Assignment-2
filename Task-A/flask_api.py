@@ -1,3 +1,6 @@
+"""
+Contains the database schema to allow mapping to the database table.
+"""
 from datetime import datetime
 from flask import Flask, Blueprint, request, jsonify, render_template,redirect,url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -19,6 +22,9 @@ ma = Marshmallow()
 
 # Declaring the model.
 class Car(db.Model):
+    """
+    The database schema for the Car table.
+    """
     __tablename__ = "Car"
     CarID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     Make = db.Column(db.Text)
@@ -41,6 +47,9 @@ class Car(db.Model):
 
 
 class User(db.Model):
+    """
+    The database schema for the User table.
+    """
     __tablename__ = "User"
     UserID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     FirstName = db.Column(db.Text)
@@ -59,6 +68,9 @@ class User(db.Model):
 
 
 class Login(db.Model):
+    """
+    The database schema for the Login table.
+    """
     __tablename__ = "Login"
     LoginID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     UserName = db.Column(db.Text)
@@ -69,11 +81,12 @@ class Login(db.Model):
         self.UserName = UserName
         self.Password = Password
 
-
 class Booking(db.Model):
+    """
+    The database schema for the Booking table.
+    """
     __tablename__ = "Booking"
     BookingID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    PickUpDate = db.Column(db.Date)
     PickUpTime = db.Column(db.Time)
     ReturnDate = db.Column(db.Date)
     ReturnTime = db.Column(db.Time)
@@ -102,42 +115,48 @@ class Booking(db.Model):
 
 
 class CarSchema(ma.Schema):
+    """
+    Format Car schema output with marshmallow.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     class Meta:
         fields = ("CarID", "Make", "Type", "Location", "Color", "Seats", "CostPerHour","Status")
 
-
 carsSchema = CarSchema()
 carsSchema = CarSchema(many=True)
 
-
 class UserSchema(ma.Schema):
+    """
+    Format User schema output with marshmallow.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     class Meta:
         fields = ("UserID", "FirstName", "LastName", "UserName", "Email", "Role")
 
-
 usersSchema = UserSchema()
 usersSchema = UserSchema(many=True)
 
-
 class LoginSchema(ma.Schema):
+    """
+    Format Login schema output with marshmallow.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     class Meta:
         fields = ("LoginID", "UserName", "Password")
 
-
 loginSchema = LoginSchema()
 loginSchema = LoginSchema(many=True)
 
-
 class BookingSchema(ma.Schema):
+    """
+    Format Booking schema output with marshmallow.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -152,8 +171,10 @@ class BookingSchema(ma.Schema):
             "UserName",
         )
 
-
 class BookingDetailsSchema(ma.Schema):
+    """
+    Format Booking Detail schema output with marshmallow.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -174,22 +195,32 @@ class BookingDetailsSchema(ma.Schema):
             "CostPerHour",
         )
 
-
 bookingSchema = BookingSchema()
 bookingSchema = BookingSchema(many=True)
 
 bookingDetailsSchema = BookingDetailsSchema()
 bookingDetailsSchema = BookingDetailsSchema(many=True)
 
-
 @api.route("/car", methods=["GET"])
 def getCars():
+    """
+    Gets cars information from database.
+
+    Returns:
+        JSON: Car information (e.g "CarID", "Make", "Type", "Location", "Color", "Seats", "CostPerHour","Status")
+    """
     cars = Car.query.all()
     result = carsSchema.dump(cars)
     return jsonify(result)
 
 @api.route("/updatecarlocation", methods=["POST"])
 def updateCarLocation():
+    """
+    Updates car location in the database.
+
+    Returns:
+        JSON: Car information (e.g "CarID", "Make", "Type", "Location", "Color", "Seats", "CostPerHour","Status")
+    """
     data = request.get_json(force=True)
     car = Car.query.filter(Car.CarID == data["id"])
     car[0].Location = data["location"]
@@ -199,6 +230,12 @@ def updateCarLocation():
 
 @api.route("/updatecarstatus", methods=["POST"])
 def updateCarStatus():
+    """
+    Updates car status in the database.
+
+    Returns:
+        JSON: Car information (e.g "CarID", "Make", "Type", "Location", "Color", "Seats", "CostPerHour","Status")
+    """
     data = request.get_json(force=True)
     car = Car.query.filter(Car.CarID == data["id"])
     car[0].Status = data["status"]
@@ -209,6 +246,17 @@ def updateCarStatus():
 
 @api.route("/car/<make>/<seats>/<price>", methods=["GET"])
 def getFilteredCars(make, seats,price):
+    """
+    Retrieve car information from database and filter them based on make/seat/price.
+
+    Args:
+        make (str): Car make
+        seats (int): No. of Seats in the car
+        price (str): Rental price of car
+
+    Returns:
+        JSON: Car information (e.g "CarID", "Make", "Type", "Location", "Color", "Seats", "CostPerHour","Status")
+    """
     cars = Car.query.all()
     filteredByMake = []
     filteredBySeats = []
@@ -237,12 +285,24 @@ def getFilteredCars(make, seats,price):
 
 @api.route("/users", methods=["GET"])
 def getUsers():
+    """
+    Retrieve users' information from database.
+
+    Returns:
+        JSON: User information (e.g "UserID", "FirstName", "LastName", "UserName", "Email", "Role")
+    """
     users = User.query.all()
     result = usersSchema.dump(users)
     return jsonify(result)
 
 @api.route("/users/<username>", methods=["POST"])
 def user_exists(username):
+    """
+    Check whether input username exists in the database.
+
+    Returns:
+        JSON: "message": "True"/"False"
+    """
     print(username)
     user = User.query.filter_by(UserName=username).first()
     if user:
@@ -253,6 +313,12 @@ def user_exists(username):
 
 @api.route("/logins", methods=["GET"])
 def getLogins():
+    """
+    Get all login data from database.
+
+    Returns:
+        JSON: Login information (e.g "LoginID", "UserName", "Password")
+    """
     logins = Login.query.all()
     result = loginSchema.dump(logins)
     return jsonify(result)
@@ -260,6 +326,15 @@ def getLogins():
 
 @api.route("/bookings/<carId>", methods=["GET"])
 def getBookings(carId):
+    """
+    Get all bookings from database.
+
+    Args:
+        carId (str): Car unique identifier
+
+    Returns:
+        JSON: Booking information (e.g "BookingID","PickUpDate","PickUpTime","ReturnDate","ReturnTime","CarID","UserName")
+    """
     bookings = Booking.query.filter_by(CarID=carId)
     result = bookingSchema.dump(bookings)
     return jsonify(result)
@@ -267,6 +342,13 @@ def getBookings(carId):
 
 @api.route("/bookingsByUser/<userId>", methods=["GET", "POST"])
 def getBookingsByUserId(userId):
+    """
+    Get all booking details from database.
+
+    Returns:
+        JSON: Booking details information (e.g "BookingID","PickUpDate","PickUpTime","ReturnDate","ReturnTime",
+        "UserName","CarID","Make","Type","Location","Color","Seats","CostPerHour")
+    """
     bookings = (
         Booking.query.join(Car, Booking.CarID == Car.CarID)
         .add_columns(
@@ -295,6 +377,16 @@ def getBookingsByUserId(userId):
 # For testing this add a booking one in the morning and one at night.You would only receive the booking which at night.
 @api.route("/bookingsByUserAndDate/<userId>", methods=["GET", "POST"])
 def getBookingsByUserIdAndDate(userId):
+    """
+    Fetch bookings for a particular user from database where the return date and return time is greater than the current time and todays date.
+
+    Args:
+        userId (str): User's unique identifier.
+
+    Returns:
+        JSON: Booking details information (e.g "BookingID","PickUpDate","PickUpTime","ReturnDate","ReturnTime","UserName",
+        "CarID","Make","Type","Location","Color","Seats","CostPerHour")
+    """
     today = date.today().isoformat()
     currentTime = datetime.datetime.now().time()
     print(datetime.datetime.now().time())
@@ -321,18 +413,27 @@ def getBookingsByUserIdAndDate(userId):
     result = bookingDetailsSchema.dump(bookings)
     return jsonify(result)
 
-
-
 @api.route("/bookings/", methods=["GET"])
 def getAllBookings():
+    """
+    Get all bookings from database.
+
+    Returns:
+        JSON: Booking information (e.g "BookingID","PickUpDate","PickUpTime","ReturnDate","ReturnTime","CarID","UserName")
+    """
     bookings = Booking.query.all()
     result = bookingSchema.dump(bookings)
     return jsonify(result)
 
-
 # Endpoint to create new user.
 @api.route("/registerUser", methods=["GET", "POST"])
 def addUser():
+    """
+    Add user into the database.
+
+    Returns:
+        JSON: "message": "This email is already registered with another account"/"This username is already taken"/"Success"
+    """
     data = request.get_json(force=True)
     userWithSameUsername = User.query.filter_by(UserName=data["username"]).first()
     userWithSameEmail = User.query.filter_by(Email=data["email"]).first()
@@ -365,9 +466,15 @@ def addUser():
 
 
 @api.route("/loginUser", methods=["GET", "POST"])
-def checkLogin():
-    data = request.get_json(force=True)
 
+def checkLogin():
+    """
+    Retrieve login information from database and verify login details based on username and password. 
+
+    Returns:
+        JSON: "message": "Invalid username or password"/"Success"
+    """
+    data = request.get_json(force=True)
     user = Login.query.filter_by(UserName=data["username"]).first()
     if user:
         if sha256_crypt.verify(data["password"], user.Password):
@@ -376,6 +483,14 @@ def checkLogin():
 
 @api.route("/cancelBooking/<bookingId>", methods = ["GET", "POST"])
 def cancelBooking(bookingId):
+    """
+    Remove booking from database.
+    Args:
+        bookingId (str): Booking's unique identifier.
+
+    Returns:
+        Redirects client to "site.bookingsByUser"
+    """
     cancel = Booking.query.filter_by(BookingID = bookingId).one()
     db.session.delete(cancel)
     db.session.commit()
@@ -383,6 +498,12 @@ def cancelBooking(bookingId):
 
 @api.route("/bookingDetails", methods=["GET", "POST"])
 def addBooking():
+    """
+    Add booking into database.
+
+    Returns:
+        JSON: "message": "Pick up and return dates cannot be same"/"Cannot enter a date in the past"/"Pick up date has to be before return date"/"Car not available in this slot"/"Success"
+    """
     today = date.today()
     data = request.get_json(force=True)
     dataOne = json.loads(data, cls=json.JSONDecoder)

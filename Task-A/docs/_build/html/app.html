@@ -78,15 +78,15 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-  <li class="toctree-l1"><a class="reference internal" href="flask_main.html">Main</a>
-    <li class="toctree-l1"><a class="reference internal" href="flask_api.html">Flask_API</a>
-    <li class="toctree-l1"><a class="reference internal" href="app.html">Site Routes</a>
-    <li class="toctree-l1"><a class="reference internal" href="database_utils.html">Database Utilities</a>
-    <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a>
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+                <li><a class="reference internal" href="index.html">Home</a></li>
+                <li><a class="reference internal" href="flask_api.html"><span class="std std-ref">Flask_API</span></a></li>
+                <li><a class="reference internal" href="app.html"><span class="std std-ref">App</span></a></li>
+                <li><a class="reference internal" href="database_utils.html"><span class="std std-ref">Database Utilities</span></a></li>
+                <li><a class="reference internal" href="forms.html"><span class="std std-ref">Forms</span></a></li>
 </ul>
-
+</div>
             
           
         </div>
@@ -149,8 +149,137 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="app-module">
-<h1>app module<a class="headerlink" href="#app-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-app">
+<span id="app-module"></span><h1>app module<a class="headerlink" href="#module-app" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="app.DateTimeEncoder">
+<em class="property">class </em><code class="sig-prename descclassname">app.</code><code class="sig-name descname">DateTimeEncoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">skipkeys</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">ensure_ascii</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">check_circular</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">allow_nan</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">sort_keys</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">indent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">separators</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.DateTimeEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">json.encoder.JSONEncoder</span></code></p>
+<p>Encodes datetime into ISO format.
+:param obj: datetime
+:type obj: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Date and time in ISO format.</p>
+</dd>
+</dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.booking">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">booking</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.booking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes user to the booking page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Booking page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.bookingDetails">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">bookingDetails</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">carId</span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.bookingDetails" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes user to the registration page.
+:param carId: Car unique identifier
+:type carId: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Bookind details page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.bookingsByUser">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">bookingsByUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.bookingsByUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays user’s booking history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Booking by user page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.dashboard">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">dashboard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.dashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes user to the dashboard page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dashboard page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.home">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">home</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.home" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes user to the home page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Home page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.login">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes user to the login page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Login page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.logout">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">logout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs user out and ends the session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Home page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.register">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes user to the registration page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Registration page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 

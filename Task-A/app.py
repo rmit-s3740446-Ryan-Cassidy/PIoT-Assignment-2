@@ -19,8 +19,15 @@ from json import JSONEncoder
 import datetime
 from datetime import date, time 
 
-
 class DateTimeEncoder(JSONEncoder):
+    """
+    Encodes datetime into ISO format.
+    Args:
+        obj(str): datetime
+    
+    Return:
+        Date and time in ISO format.
+    """
     def default(self, obj):
         if isinstance(obj, (datetime.date, datetime.datetime, datetime.time)):
             return obj.isoformat()
@@ -97,15 +104,33 @@ cars = [
 @site.route("/")
 @site.route("/home")
 def home():
+    """
+    Routes user to the home page.
+
+    Returns:
+        HTML: Home page.
+    """
     return render_template("home.html")
 
 @site.route("/logout")
 def logout():
+    """
+    Logs user out and ends the session.
+
+    Returns:
+        HTML: Home page.
+    """
     session.pop('username')
     return redirect(url_for("site.home"))
 
 @site.route("/register", methods=["GET", "POST"])
 def register():
+    """
+    Routes user to the registration page.
+
+    Returns:
+        HTML: Registration page.
+    """
     form = RegistrationForm()
     if form.validate_on_submit():
         userRegistrationData = {"firstname":form.firstname.data, "lastname":form.lastname.data, "username":form.username.data, "email":form.email.data, "password":sha256_crypt.hash(form.password.data)}
@@ -124,6 +149,12 @@ def register():
 
 @site.route("/login", methods=["GET", "POST"])
 def login():
+    """
+    Routes user to the login page.
+
+    Returns:
+        HTML: Login page.
+    """
     form = LoginForm()
     if form.validate_on_submit():
         userLoginData = {"username":form.username.data, "password":form.password.data}
@@ -140,10 +171,22 @@ def login():
 
 @site.route("/dashboard/")
 def dashboard():
+    """
+    Routes user to the dashboard page.
+
+    Returns:
+        HTML: Dashboard page.
+    """
     return render_template("dashboard.html", title="Dashboard")
 
 @site.route("/booking", methods=["GET", "POST"])
 def booking():
+    """
+    Routes user to the booking page.
+
+    Returns:
+        HTML: Booking page.
+    """
     form = CarsFilterForm()
     response = requests.get(
         request.host_url + "/car/" + form.make.data + "/" + form.seats.data + "/" + form.price.data
@@ -154,6 +197,14 @@ def booking():
 
 @site.route("/bookingDetails/<carId>", methods=["GET", "POST"])
 def bookingDetails(carId):
+    """
+    Routes user to the registration page.
+    Args:
+        carId(str): Car unique identifier
+
+    Returns:
+        HTML: Bookind details page.
+    """
     form = BookingForm()
     if form.validate_on_submit():
         userBookingData = {
@@ -176,6 +227,12 @@ def bookingDetails(carId):
 
 @site.route("/bookingsByUser", methods=["GET", "POST"])
 def bookingsByUser():
+    """
+    Displays user's booking history.
+
+    Returns:
+        HTML: Booking by user page.
+    """
     response = requests.post(
         request.host_url + "/bookingsByUser/" + session["username"]
     )
