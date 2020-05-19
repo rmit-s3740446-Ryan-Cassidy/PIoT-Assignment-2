@@ -12,7 +12,7 @@ import numpy as np
 
 # This script must be run on a machine that has cv2 installed
 # Requires encodings.pickle in same directory
-encodings = open("encodings.pickle", 'rb').read()
+encodings_file = open("encodings.pickle", 'rb').read()
 
 # Pass a Pillow opened image object
 def recognize(image):
@@ -24,7 +24,7 @@ def recognize(image):
         image = Image.open(imgdata)
 
     # load the known faces and embeddings
-    data = pickle.loads(encodings)
+    data = pickle.loads(encodings_file)
 
     # load the input image and convert it from BGR to RGB
     image = np.array(image)

@@ -60,6 +60,7 @@ class DatabaseUtils:
                 UserName text(20) not  null,
                 Email text not  null,
                 Role text not  null,
+                credentials json,
                 constraint PK_Car primary key (UserID)
                 )"""
             )
