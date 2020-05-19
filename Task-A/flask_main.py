@@ -7,12 +7,9 @@ import MySQLdb
 from database_utils import DatabaseUtils
 from socketioServer import sios
 import eventlet
-import flask_login
 from app import site
-from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 basedir = os.path.abspath(os.path.dirname(__file__))
 eventlet.monkey_patch()
