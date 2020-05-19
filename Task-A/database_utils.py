@@ -18,6 +18,9 @@ class DatabaseUtils:
         self.connection = connection
 
     def close(self):
+        """
+        Closes the database connection. 
+        """
         self.connection.close()
 
     def __enter__(self):
@@ -27,6 +30,9 @@ class DatabaseUtils:
         self.close()
 
     def createTables(self):
+        """
+        Create database tables if tables do not exists
+        """
         with self.connection.cursor() as cursor:
             # cursor.execute("drop table if exists Car")
             # cursor.execute("drop table if exists User")
