@@ -90,6 +90,7 @@ class Booking(db.Model):
     """
     __tablename__ = "Booking"
     BookingID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    PickUpDate = db.Column(db.Date)
     PickUpTime = db.Column(db.Time)
     ReturnDate = db.Column(db.Date)
     ReturnTime = db.Column(db.Time)

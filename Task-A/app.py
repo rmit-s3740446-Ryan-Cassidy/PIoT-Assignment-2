@@ -67,11 +67,6 @@ def logout():
     session.pop('username')
     return redirect(url_for("site.home"))
 
-@site.route("/logout")
-def logout():
-        flask.session.pop('username')
-        return flask.redirect(flask.url_for("site.home"))
-
 @site.route("/register", methods=["GET", "POST"])
 def register():
     """
