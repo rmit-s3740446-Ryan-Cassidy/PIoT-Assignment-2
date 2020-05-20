@@ -1,3 +1,7 @@
+"""
+Contains all the forms required to obtain data from user.
+"""
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField,SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
@@ -37,6 +41,11 @@ class CarsFilterForm(FlaskForm):
     seats = SelectField(
         u'Filter By Seats:',
         choices = [('All seats', 'All seats'),('6', '6'), ('7', '7')], default='All seats'
+        
+    )
+    price = SelectField(
+        u'Filter By Cost/Hr:',
+        choices = [('All prices', 'All prices'),('10', '10'), ('20', '20')], default='All prices'
         
     )
     submit = SubmitField("Filter")

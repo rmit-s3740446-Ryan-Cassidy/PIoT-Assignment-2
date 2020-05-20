@@ -1,0 +1,498 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>flask_api module &mdash; Car Rental Website  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Car Rental Website
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+                <li><a class="reference internal" href="index.html">Home</a></li>
+                <li><a class="reference internal" href="flask_api.html"><span class="std std-ref">Flask_API</span></a></li>
+                <li><a class="reference internal" href="app.html"><span class="std std-ref">App</span></a></li>
+                <li><a class="reference internal" href="database_utils.html"><span class="std std-ref">Database Utilities</span></a></li>
+                <li><a class="reference internal" href="forms.html"><span class="std std-ref">Forms</span></a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Car Rental Website</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>flask_api module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/flask_api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-flask_api">
+<span id="flask-api-module"></span><h1>flask_api module<a class="headerlink" href="#module-flask_api" title="Permalink to this headline">¶</a></h1>
+<p>Contains the database schema to allow mapping to the database table.</p>
+<dl class="py class">
+<dt id="flask_api.Booking">
+<em class="property">class </em><code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">Booking</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">PickUpDate</span></em>, <em class="sig-param"><span class="n">PickUpTime</span></em>, <em class="sig-param"><span class="n">ReturnDate</span></em>, <em class="sig-param"><span class="n">ReturnTime</span></em>, <em class="sig-param"><span class="n">CarID</span></em>, <em class="sig-param"><span class="n">UserName</span></em>, <em class="sig-param"><span class="n">BookingID</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.Booking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.ext.declarative.api.Model</span></code></p>
+<p>The database schema for the Booking table.</p>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="flask_api.BookingDetailsSchema">
+<em class="property">class </em><code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">BookingDetailsSchema</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.BookingDetailsSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">flask_marshmallow.schema.Schema</span></code></p>
+<p>Format Booking Detail schema output with marshmallow.</p>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="flask_api.BookingSchema">
+<em class="property">class </em><code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">BookingSchema</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.BookingSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">flask_marshmallow.schema.Schema</span></code></p>
+<p>Format Booking schema output with marshmallow.</p>
+
+</dd></dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="flask_api.Car">
+<em class="property">class </em><code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">Car</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Make</span></em>, <em class="sig-param"><span class="n">Type</span></em>, <em class="sig-param"><span class="n">Location</span></em>, <em class="sig-param"><span class="n">Color</span></em>, <em class="sig-param"><span class="n">Seats</span></em>, <em class="sig-param"><span class="n">Status</span></em>, <em class="sig-param"><span class="n">CostPerHour</span></em>, <em class="sig-param"><span class="n">CarID</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.Car" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.ext.declarative.api.Model</span></code></p>
+<p>The database schema for the Car table.</p>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="flask_api.CarSchema">
+<em class="property">class </em><code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">CarSchema</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.CarSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">flask_marshmallow.schema.Schema</span></code></p>
+<p>Format Car schema output with marshmallow.</p>
+<dd></dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="flask_api.Login">
+<em class="property">class </em><code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">Login</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Password</span></em>, <em class="sig-param"><span class="n">UserName</span></em>, <em class="sig-param"><span class="n">LoginID</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.Login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.ext.declarative.api.Model</span></code></p>
+<p>The database schema for the Login table.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="flask_api.LoginSchema">
+<em class="property">class </em><code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">LoginSchema</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.LoginSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">flask_marshmallow.schema.Schema</span></code></p>
+<p>Format Login schema output with marshmallow.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="flask_api.User">
+<em class="property">class </em><code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">User</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">FirstName</span></em>, <em class="sig-param"><span class="n">LastName</span></em>, <em class="sig-param"><span class="n">UserName</span></em>, <em class="sig-param"><span class="n">Email</span></em>, <em class="sig-param"><span class="n">Role</span></em>, <em class="sig-param"><span class="n">UserID</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.ext.declarative.api.Model</span></code></p>
+<p>The database schema for the User table.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="flask_api.UserSchema">
+<em class="property">class </em><code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">UserSchema</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.UserSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">flask_marshmallow.schema.Schema</span></code></p>
+<p>Format User schema output with marshmallow.</p>
+<dd></dd></dl>
+
+</dd></dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.addBooking">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">addBooking</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.addBooking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add booking into database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>“message”: “Pick up and return dates cannot be same”/”Cannot enter a date in the past”/”Pick up date has to be before return date”/”Car not available in this slot”/”Success”</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.addUser">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">addUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.addUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add user into the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>“message”: “This email is already registered with another account”/”This username is already taken”/”Success”</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.cancelBooking">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">cancelBooking</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bookingId</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.cancelBooking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove booking from database.
+:param bookingId: Booking’s unique identifier.
+:type bookingId: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Redirects client to “site.bookingsByUser”</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.checkLogin">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">checkLogin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.checkLogin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve login information from database and verify login details based on username and password.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>“message”: “Invalid username or password”/”Success”</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.getAllBookings">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">getAllBookings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.getAllBookings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all bookings from database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Booking information (e.g “BookingID”,”PickUpDate”,”PickUpTime”,”ReturnDate”,”ReturnTime”,”CarID”,”UserName”)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.getBookings">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">getBookings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">carId</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.getBookings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all bookings from database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>carId</strong> (<em>str</em>) – Car unique identifier</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Booking information (e.g “BookingID”,”PickUpDate”,”PickUpTime”,”ReturnDate”,”ReturnTime”,”CarID”,”UserName”)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.getBookingsByUserId">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">getBookingsByUserId</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">userId</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.getBookingsByUserId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all booking details from database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Booking details information (e.g “BookingID”,”PickUpDate”,”PickUpTime”,”ReturnDate”,”ReturnTime”,
+“UserName”,”CarID”,”Make”,”Type”,”Location”,”Color”,”Seats”,”CostPerHour”)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.getBookingsByUserIdAndDate">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">getBookingsByUserIdAndDate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">userId</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.getBookingsByUserIdAndDate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch bookings for a particular user from database where the return date and return time is greater than the current time and todays date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>userId</strong> (<em>str</em>) – User’s unique identifier.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Booking details information (e.g “BookingID”,”PickUpDate”,”PickUpTime”,”ReturnDate”,”ReturnTime”,”UserName”,
+“CarID”,”Make”,”Type”,”Location”,”Color”,”Seats”,”CostPerHour”)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.getCars">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">getCars</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.getCars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets cars information from database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Car information (e.g “CarID”, “Make”, “Type”, “Location”, “Color”, “Seats”, “CostPerHour”,”Status”)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.getFilteredCars">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">getFilteredCars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">make</span></em>, <em class="sig-param"><span class="n">seats</span></em>, <em class="sig-param"><span class="n">price</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.getFilteredCars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve car information from database and filter them based on make/seat/price.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>make</strong> (<em>str</em>) – Car make</p></li>
+<li><p><strong>seats</strong> (<em>int</em>) – No. of Seats in the car</p></li>
+<li><p><strong>price</strong> (<em>str</em>) – Rental price of car</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Car information (e.g “CarID”, “Make”, “Type”, “Location”, “Color”, “Seats”, “CostPerHour”,”Status”)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.getLogins">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">getLogins</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.getLogins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all login data from database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Login information (e.g “LoginID”, “UserName”, “Password”)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.getUsers">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">getUsers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.getUsers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve users’ information from database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>User information (e.g “UserID”, “FirstName”, “LastName”, “UserName”, “Email”, “Role”)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.updateCarLocation">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">updateCarLocation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.updateCarLocation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates car location in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Car information (e.g “CarID”, “Make”, “Type”, “Location”, “Color”, “Seats”, “CostPerHour”,”Status”)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.updateCarStatus">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">updateCarStatus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.updateCarStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates car status in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Car information (e.g “CarID”, “Make”, “Type”, “Location”, “Color”, “Seats”, “CostPerHour”,”Status”)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_api.user_exists">
+<code class="sig-prename descclassname">flask_api.</code><code class="sig-name descname">user_exists</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_api.user_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether input username exists in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>“message”: “True”/”False”</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, plchan
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

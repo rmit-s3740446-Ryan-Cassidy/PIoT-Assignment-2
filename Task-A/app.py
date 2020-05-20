@@ -218,6 +218,7 @@ def addEvent():
     timeZone = 'Australia/Melbourne'
 
     """Add event to primary google calendar of current user
+
             Arguments:
             title {[str]} -- [title of the event]
             location {[str]} -- [location of event]
