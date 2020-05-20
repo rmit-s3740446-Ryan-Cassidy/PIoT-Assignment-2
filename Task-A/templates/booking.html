@@ -29,30 +29,138 @@
                         {{ form.seats(class="form-control form-control ml-2") }}
                     {% endif %}
                 </div>
+                <div class="form-group">
+                  {{ form.price.label(class="form-control-label ml-2") }}
+                  {% if form.price.errors %}
+                      {{ form.price(class="form-control form-control is-invalid ml-2") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.price.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.price(class="form-control form-control ml-2") }}
+                  {% endif %}
+              </div>
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info ml-4") }}
             </div>
         </form>
 </div>
+<script>var lats = [];var lngs = [];var makes = [];var seats = [];types = [];costs =[];</script> 
+    {% for lat in lats %}
+      <script> 
+      this.lats.push("{{lat}}"); 
+      </script>
+    {% endfor %}
+    {% for lng in lngs %}
+      <script> 
+      this.lngs.push("{{lng}}"); 
+      </script>
+    {% endfor %}
+    {% for make in makes %}
+      <script> 
+      this.makes.push("{{make}}"); 
+      </script>
+    {% endfor %}
+    {% for seat in seats %}
+      <script> 
+      this.seats.push("{{seat}}"); 
+      </script>
+    {% endfor %}
+    {% for type in types %}
+      <script> 
+      this.types.push("{{type}}"); 
+      </script>
+    {% endfor %}
+    {% for cost in costs %}
+      <script> 
+      this.costs.push("{{cost}}"); 
+      </script>
+    {% endfor %}
 <div class="container">
     <div class="row">
+      <script>var cars = [];;</script> 
       {% for car in cars %}
-      <div class="col-lg-4">
-        <div class="card mt-5" style="width: 18rem;">
-          <div class="card-body">
-            <h5 class="card-title">{{car.Make}}</h5>
-            <p class="card-text">
-              <i class="fas fa-car"></i>: {{car.Type}}
-              <i class="fas fa-male ml-2"></i> : {{car.Seats}}
-            </p>
-            <p class="card-text mt-0">
-              <i class="fas fa-map-marker-alt"></i>: {{car.Location}}
-              <i class="fas fa-dollar-sign ml-2"></i>: {{car.CostPerHour}} /hr
-            </p>
-            <a href={{ url_for('site.bookingDetails', carId = car.CarID) }} class="btn btn-outline-info text-center">Book Now</a>
+        <script>this.cars.push("{{car}}");</script>
+        <div class="col-lg-4">
+          <div class="card mt-5" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">{{car.Make}}</h5>
+              <p class="card-text">
+                <i class="fas fa-car"></i>: {{car.Type}}
+                <i class="fas fa-male ml-2"></i> : {{car.Seats}}
+              </p>
+              <p class="card-text mt-0">
+                <i class="fas fa-map-marker-alt"></i>: {{car.Location}}
+                <i class="fas fa-dollar-sign ml-2"></i>: {{car.CostPerHour}} /hr
+              </p>
+              <a href={{ url_for('site.bookingDetails', carId = car.CarID) }} class="btn btn-outline-info text-center">Book Now</a>
+            </div>
           </div>
         </div>
-      </div>
       {% endfor %}
     </div>
+  </div>
+  <center>
+      <div id="map" style="height: 700px;width: 700px;margin-top: 50px;"></div>
+  </center>
+    <script>
+        var map;
+        function initMap() {
+          map = new google.maps.Map(
+              document.getElementById('map'),
+              {center: new google.maps.LatLng(-33.91722, 151.23064), zoom: 16});
+          var features = [];
+          var InfoObj = []; 
+          for(var i = 0; i<=lats.length-1;i++){
+            features.push({
+              position: new google.maps.LatLng(lats[i], lngs[i])
+            })
+          }
+          function closeOtherInfo(){
+          if(InfoObj[0].length >0){
+            InfoObj[0].set("marker",null);
+          InfoObj[0].close;
+          InfoObj[0].length = 0;
+          }
+          
+        }
+        // Create markers.
+        for (var i = 0; i < features.length; i++) {
+          var marker = new google.maps.Marker({
+            position: features[i].position,
+            map: map
+          });
+          var contentString = 
+            '<div class="card mt-5" style="width: 18rem;">'+
+            '<div class="card-body">'+
+            '<h5 class="card-title">'+this.makes[i]+'</h5>'+
+            '<p class="card-text">'+
+            '<i class="fas fa-car"></i>: '+this.types[i]+
+            '<i class="fas fa-male ml-2"></i> : '+this.seats[i]+
+            '</p>'+
+            '<p class="card-text mt-0">'+
+            '<i class="fas fa-dollar-sign ml-2"></i>: '+this.costs[i]+'/hr'+
+            '</p>'+
+            '</div>'+
+            '</div>';
+          const infowindow = new google.maps.InfoWindow({
+            content: contentString
+          });
+          marker.addListener('click', function() {
+            if(InfoObj.length >0){
+            InfoObj[0].set("marker",null);
+            InfoObj[0].close;
+            InfoObj[0].length = 0;
+          }
+          infowindow.open(marker.get('map'), marker);
+          InfoObj[0] = infowindow;
+          });
+          };
+        }
+      </script>
+      <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmNtHGGvNZ4JUMGs9nqz8w81DL1Xnzctw&callback=initMap">
+      </script>
 {% endblock content %}
