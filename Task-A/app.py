@@ -50,7 +50,6 @@ site = flask.Blueprint("site", __name__)
 def home():
     """
     Routes user to the home page.
-
     Returns:
         HTML: Home page.
     """
@@ -60,7 +59,6 @@ def home():
 def logout():
     """
     Logs user out and ends the session.
-
     Returns:
         HTML: Home page.
     """
@@ -71,7 +69,6 @@ def logout():
 def register():
     """
     Routes user to the registration page.
-
     Returns:
         HTML: Registration page.
     """
@@ -95,7 +92,6 @@ def register():
 def login():
     """
     Routes user to the login page.
-
     Returns:
         HTML: Login page.
     """
@@ -117,7 +113,6 @@ def login():
 def dashboard():
     """
     Routes user to the dashboard page.
-
     Returns:
         HTML: Dashboard page.
     """
@@ -130,7 +125,6 @@ def dashboard():
 def booking():
     """
     Routes user to the booking page.
-
     Returns:
         HTML: Booking page.
     """
@@ -139,8 +133,32 @@ def booking():
         request.host_url + "/car/" + form.make.data + "/" + form.seats.data + "/" + form.price.data
     )
     data = json.loads(response.text)
-    return flask.render_template("booking.html", cars=data, form=form)
+    lats = []
+    lngs = []
+    makes = []
+    seats = []
+    types = []
+    costs = []
+    for x in data:
+        y = json.loads(x["Location"])
+        lats.append(y["location"]["lat"])
+        lngs.append(y["location"]["lng"])
+        makes.append(x["Make"])
+        seats.append(x["Seats"])
+        types.append(x["Type"])
+        costs.append(x["CostPerHour"])
 
+    return render_template(
+        "booking.html",
+        cars=data,
+        form=form,
+        lats=lats,
+        lngs=lngs,
+        makes=makes,
+        seats=seats,
+        types=types,
+        costs=costs,
+    )
 
 @site.route("/bookingDetails/<carId>", methods=["GET", "POST"])
 def bookingDetails(carId):
@@ -148,7 +166,6 @@ def bookingDetails(carId):
     Routes user to the registration page.
     Args:
         carId(str): Car unique identifier
-
     Returns:
         HTML: Bookind details page.
     """
@@ -176,7 +193,6 @@ def bookingDetails(carId):
 def bookingsByUser():
     """
     Displays user's booking history.
-
     Returns:
         HTML: Booking by user page.
     """

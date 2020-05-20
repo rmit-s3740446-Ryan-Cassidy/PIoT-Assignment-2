@@ -73,14 +73,10 @@ class DatabaseUtils:
                 constraint PK_Car primary key (LoginID)
                 )"""
             )
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','3073','Red','6','10','Available')")
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','3074','Blue','7','10','Available')")
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Civic','Sedan','3075','Red','6','10','Available')")
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Civic','Sedan','3076','Blue','7','20','Available')")
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','3077','Red','6','20','Available')")
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','3076','Blue','7','20','Available')")
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Civic','Sedan','3073','Red','6','20','Available')")
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Civic','Sedan','3073','Blue','7','20','Available')")
+            # location = '{"location": {"lat": -33.91747, "lng": 151.22912}, "accuracy": 2312}'
+            # locationOne = '{"location": {"lat": -33.91910, "lng": 151.22907}, "accuracy": 2312}'
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','"+location+"','Red','6','10','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','"+locationOne+"','Blue','7','10','Available')")
             # cursor.execute("drop table if exists Booking")
             cursor.execute(
                 """
