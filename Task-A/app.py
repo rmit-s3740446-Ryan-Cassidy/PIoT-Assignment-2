@@ -276,6 +276,7 @@ def oauth2callback():
     flask.flash("Gcal authenticated.", 'success')
     return flask.redirect(flask.url_for('site.dashboard'))
 
+# Route for devs only. To clear gcal credentaisl for current user.
 @site.route("/clear_creds")
 def clear_creds():
     if 'username' in flask.session:
