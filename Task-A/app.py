@@ -262,11 +262,11 @@ def oauth2callback():
     flow = Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
     flow.redirect_uri = flask.url_for('site.oauth2callback', _external=True)
     # Use the authorization server's response to fetch the OAuth 2.0 tokens.
-    authorization_response = flask.request.url
-    if 'error' in authorization_response:
+    auth_response = flask.request.url
+    if 'error' in auth_response:
         return flask.redirect(flask.url_for('site.dashboard'))
 
-    flow.fetch_token(authorization_response=authorization_response)
+    flow.fetch_token(authorization_response=auth_response)
     creds = flow.credentials
     
     user = User.query.filter_by(UserName=flask.session['username']).first()
@@ -275,6 +275,16 @@ def oauth2callback():
 
     flask.flash("Gcal authenticated.", 'success')
     return flask.redirect(flask.url_for('site.dashboard'))
+
+@site.route("/clear_creds")
+def clear_creds():
+    if 'username' in flask.session:
+        user = User.query.filter_by(UserName=flask.session['username']).first()
+        user.credentials = None
+        db.session.commit()
+        return jsonify({"success":"Credentials cleared for {user.UserName}"})
+    else:
+        return jsonify({"error":"Not signed in!"})
 
 @site.route("/authorize")
 def authorize():
@@ -285,6 +295,7 @@ def authorize():
         # Enable offline access so that you can refresh an access token without
         # re-prompting the user for permission. Recommended for web server apps.
         access_type='offline',
+        prompt='select_account',
         # Enable incremental authorization. Recommended as a best practice.
         include_granted_scopes='true')
     return flask.redirect(authorization_url)
