@@ -235,7 +235,8 @@ def updateCarLocation():
     """
     data = request.get_json(force=True)
     car = Car.query.filter(Car.CarID == data["id"])
-    car[0].Location = data["location"]
+    updatedLocation = json.dumps(data["location"])
+    car[0].Location = updatedLocation
     db.session.commit()
     result = carsSchema.dump(car)
     return jsonify(result)
@@ -315,7 +316,6 @@ def user_exists(username):
     Returns:
         JSON: "message": "True"/"False"
     """
-    print(username)
     user = User.query.filter_by(UserName=username).first()
     if user:
         return jsonify({"message": "True"})
@@ -431,7 +431,6 @@ def getBookingsByUserIdAndDate(userId):
     """
     today = date.today().isoformat()
     currentTime = datetime.datetime.now().time()
-    print(datetime.datetime.now().time())
     bookings = (
         Booking.query.join(Car, Booking.CarID == Car.CarID)
         .add_columns(
@@ -581,7 +580,6 @@ def addBooking():
     if pickUpDate == returnDate:
         return jsonify({"message": "Pick up and return dates cannot be same"})
     if pickUpDate < today:
-        print('came here')
         return jsonify({"message": "Cannot enter a date in the past"})
     if pickUpDate >= returnDate:
         return jsonify({"message":"Pick up date has to be before return date"})

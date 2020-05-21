@@ -1,4 +1,7 @@
 from flask import Flask, request, jsonify, render_template
+import gevent
+from gevent import monkey
+monkey.patch_all(subprocess=True)
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
@@ -6,13 +9,11 @@ from flask_api import api, db
 import MySQLdb
 from database_utils import DatabaseUtils
 from socketioServer import sios
-import eventlet
 from app import site
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 basedir = os.path.abspath(os.path.dirname(__file__))
-eventlet.monkey_patch()
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 HOST = "35.244.74.229"
@@ -33,4 +34,3 @@ if __name__ == "__main__":
     with DatabaseUtils() as db:
         db.createTables()
     sios.run(app, host = "192.168.1.225", debug=True)
-    #app.run(host="192.168.1.225", debug=True)

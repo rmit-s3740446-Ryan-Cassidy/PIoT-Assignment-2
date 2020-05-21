@@ -92,7 +92,6 @@
                 <i class="fas fa-male ml-2"></i> : {{car.Seats}}
               </p>
               <p class="card-text mt-0">
-                <i class="fas fa-map-marker-alt"></i>: {{car.Location}}
                 <i class="fas fa-dollar-sign ml-2"></i>: {{car.CostPerHour}} /hr
               </p>
               <a href={{ url_for('site.bookingDetails', carId = car.CarID) }} class="btn btn-outline-info text-center">Book Now</a>

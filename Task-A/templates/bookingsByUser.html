@@ -15,7 +15,6 @@
             <p class="card-text">
                 Car Info:
                 <br><i class="fas fa-car"></i> {{booking.Make}} ({{booking.Seats}}-Seater {{booking.Color}} {{booking.Type}})
-                <br><i class="fas fa-map-marker-alt"></i> {{booking.Location}}
             </p>
             {% if booking.PickUpDate > now  %}
             <a href={{ url_for('api.cancelBooking', bookingId = booking.BookingID) }} class="btn btn-outline-info text-center">Cancel Booking</a>
