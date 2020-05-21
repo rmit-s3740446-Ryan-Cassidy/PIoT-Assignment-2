@@ -345,7 +345,13 @@ def getBookings(carId):
         carId (str): Car unique identifier
 
     Returns:
-        JSON: Booking information (e.g "BookingID","PickUpDate","PickUpTime","ReturnDate","ReturnTime","CarID","UserName")
+        JSON: Booking information (e.g - "BookingID",
+        - "PickUpDate",
+        - "PickUpTime",
+        - "ReturnDate",
+        - "ReturnTime",
+        - "CarID",
+        - "UserName")
     """
     bookings = Booking.query.filter_by(CarID=carId)
     result = bookingSchema.dump(bookings)
@@ -358,8 +364,20 @@ def getBookingsByUserId(userId):
     Get all booking details from database.
 
     Returns:
-        JSON: Booking details information (e.g "BookingID","PickUpDate","PickUpTime","ReturnDate","ReturnTime",
-        "UserName","CarID","Make","Type","Location","Color","Seats","CostPerHour")
+        JSON: Booking details information (e.g 
+        - "BookingID",
+        - "PickUpDate",
+        - "PickUpTime",
+        - "ReturnDate",
+        - "ReturnTime",
+        - "UserName",
+        - "CarID",
+        - "Make",
+        - "Type",
+        - "Location",
+        - "Color",
+        - "Seats",
+        - "CostPerHour")
     """
     bookings = (
         Booking.query.join(Car, Booking.CarID == Car.CarID)
@@ -396,8 +414,20 @@ def getBookingsByUserIdAndDate(userId):
         userId (str): User's unique identifier.
 
     Returns:
-        JSON: Booking details information (e.g "BookingID","PickUpDate","PickUpTime","ReturnDate","ReturnTime","UserName",
-        "CarID","Make","Type","Location","Color","Seats","CostPerHour")
+        JSON: Booking details information (e.g 
+        - "BookingID",
+        - "PickUpDate",
+        - "PickUpTime",
+        - "ReturnDate",
+        - "ReturnTime",
+        - "UserName",
+        - "CarID",
+        - "Make",
+        - "Type",
+        - "Location",
+        - "Color",
+        - "Seats",
+        - "CostPerHour")
     """
     today = date.today().isoformat()
     currentTime = datetime.datetime.now().time()
@@ -431,7 +461,14 @@ def getAllBookings():
     Get all bookings from database.
 
     Returns:
-        JSON: Booking information (e.g "BookingID","PickUpDate","PickUpTime","ReturnDate","ReturnTime","CarID","UserName")
+        JSON: Booking information (e.g 
+        - "BookingID",
+        - "PickUpDate",
+        - "PickUpTime",
+        - "ReturnDate",
+        - "ReturnTime",
+        - "CarID",
+        - "UserName")
     """
     bookings = Booking.query.all()
     result = bookingSchema.dump(bookings)

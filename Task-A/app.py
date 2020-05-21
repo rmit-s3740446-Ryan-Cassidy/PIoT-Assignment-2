@@ -1,3 +1,9 @@
+"""
+app.py
+========================
+The main flask app for userfront website.
+"""
+
 from flask import (
     Flask,
     render_template,
@@ -205,6 +211,22 @@ def bookingsByUser():
 
 @site.route("/addEvent", methods=["GET", "POST"])
 def addEvent():
+    """
+    Add event to primary google calendar of current user
+
+    Returns:
+        json: Result of adding event to calendar. Success or Error.
+    
+
+    **Event attributes sent in json data:**
+        - title {str} -- title of the event
+        - location {str} -- location of event
+        - desc {str} -- description of event
+        - startTime {str} -- even start time in format date-time = full-date "T" full-time (eg. 2020-04-29T09:00:00-07:00)
+        - endTime {str} -- event end time. Similar formatting to start time
+        - timeZone {str} -- IANA timezone for event - defaults to Australia/Melbourne
+    """
+    
     d = flask.request.get_json(force=True)
     data = json.loads(d, cls=json.JSONDecoder)
 
@@ -217,16 +239,6 @@ def addEvent():
     endTime = data['endTime']
     timeZone = 'Australia/Melbourne'
 
-    """Add event to primary google calendar of current user
-
-            Arguments:
-            title {[str]} -- [title of the event]
-            location {[str]} -- [location of event]
-            desc {[str]} -- [description of event]
-            startTime {[str]} -- [even start time in format date-time = full-date "T" full-time (eg. 2020-04-29T09:00:00-07:00)]
-            endTime {[str]} -- [event end time. Similar formatting to start time]
-            timeZone {[str]} -- [IANA timezone for event - defaults to Australia/Melbourne]
-    """
     creds = User.query.filter_by(UserName=username).first().credentials
     if not creds:
             print("Error. credentials not found")
@@ -259,6 +271,12 @@ def addEvent():
 
 @site.route("/oauth2callback")
 def oauth2callback():
+    """
+    Callback url where user is redirected after google oauth.
+
+    Returns:
+        Redirect: redirect to dashboard after saving token to db.
+    """
     flow = Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
     flow.redirect_uri = flask.url_for('site.oauth2callback', _external=True)
     # Use the authorization server's response to fetch the OAuth 2.0 tokens.
@@ -278,6 +296,12 @@ def oauth2callback():
 
 @site.route("/authorize")
 def authorize():
+    """
+    Route to initialise google oauth.
+
+    Returns:
+        Redirect: redirect to google oauth2 redirect url.
+    """
     flow = Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
     flow.redirect_uri = flask.url_for('site.oauth2callback', _external=True)
 
@@ -291,6 +315,15 @@ def authorize():
 
 
 def credentials_to_dict(credentials):
+    """This function returns a python dictionary of few selected columns from credentials.
+
+    Args:
+        credentials (flow.credentials): The credentials returned from google_auth_oauthlib.flow
+
+    Returns:
+        (dict): credential dictionary containing following keys: 'token','refresh_token','token_uri','client_id','client_secret',
+        'scopes'
+    """
     return {'token': credentials.token,
             'refresh_token': credentials.refresh_token,
             'token_uri': credentials.token_uri,
