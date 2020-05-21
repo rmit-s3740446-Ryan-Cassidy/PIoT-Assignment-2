@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>app module &#8212; IOT Car Booking Platform 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="flask_api module" href="flask_api.html" />
+    <link rel="prev" title="Welcome to IOT Car Booking Platform’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-app">
+<span id="app-module"></span><h1>app module<a class="headerlink" href="#module-app" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="app-py">
+<h2>app.py<a class="headerlink" href="#app-py" title="Permalink to this headline">¶</a></h2>
+<p>The main flask app for userfront website.</p>
+<dl class="py class">
+<dt id="app.DateTimeEncoder">
+<em class="property">class </em><code class="sig-prename descclassname">app.</code><code class="sig-name descname">DateTimeEncoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">skipkeys</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">ensure_ascii</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">check_circular</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">allow_nan</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">sort_keys</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">indent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">separators</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.DateTimeEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">json.encoder.JSONEncoder</span></code></p>
+<p>Encodes datetime into ISO format.
+:param obj: datetime
+:type obj: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Date and time in ISO format.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="app.DateTimeEncoder.default">
+<code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.DateTimeEncoder.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement this method in a subclass such that it returns
+a serializable object for <code class="docutils literal notranslate"><span class="pre">o</span></code>, or calls the base implementation
+(to raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>).</p>
+<p>For example, to support arbitrary iterators, you could
+implement default like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">iterable</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="c1"># Let the base class default method raise the TypeError</span>
+    <span class="k">return</span> <span class="n">JSONEncoder</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.addEvent">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">addEvent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.addEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add event to primary google calendar of current user</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Result of adding event to calendar. Success or Error.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>json</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt><strong>Event attributes sent in json data:</strong></dt><dd><ul class="simple">
+<li><p>title {str} – title of the event</p></li>
+<li><p>location {str} – location of event</p></li>
+<li><p>desc {str} – description of event</p></li>
+<li><p>startTime {str} – even start time in format date-time = full-date “T” full-time (eg. 2020-04-29T09:00:00-07:00)</p></li>
+<li><p>endTime {str} – event end time. Similar formatting to start time</p></li>
+<li><p>timeZone {str} – IANA timezone for event - defaults to Australia/Melbourne</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.authorize">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">authorize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.authorize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Route to initialise google oauth.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>redirect to google oauth2 redirect url.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Redirect</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.booking">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">booking</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.booking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes user to the booking page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Booking page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.bookingDetails">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">bookingDetails</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">carId</span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.bookingDetails" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes user to the registration page.
+:param carId: Car unique identifier
+:type carId: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Bookind details page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.bookingsByUser">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">bookingsByUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.bookingsByUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays user’s booking history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Booking by user page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.credentials_to_dict">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">credentials_to_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">credentials</span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.credentials_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns a python dictionary of few selected columns from credentials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>credentials</strong> (<em>flow.credentials</em>) – The credentials returned from google_auth_oauthlib.flow</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>credential dictionary containing following keys: ‘token’,’refresh_token’,’token_uri’,’client_id’,’client_secret’,
+‘scopes’</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(dict)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.dashboard">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">dashboard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.dashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes user to the dashboard page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dashboard page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.home">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">home</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.home" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes user to the home page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Home page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.login">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes user to the login page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Login page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.logout">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">logout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs user out and ends the session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Home page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.oauth2callback">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">oauth2callback</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.oauth2callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback url where user is redirected after google oauth.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>redirect to dashboard after saving token to db.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Redirect</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.register">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routes user to the registration page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Registration page.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>HTML</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">IOT Car Booking Platform</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">app module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#app-py">app.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="flask_api.html">flask_api module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flask_main.html">flask_main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="forms.html">forms module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to IOT Car Booking Platform’s documentation!</a></li>
+      <li>Next: <a href="flask_api.html" title="next chapter">flask_api module</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Akshay Salunke, Ryan Cassidy, Vineet Bugtani, Pui Ling.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/app.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
