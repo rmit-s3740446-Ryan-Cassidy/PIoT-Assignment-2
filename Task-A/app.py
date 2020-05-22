@@ -33,11 +33,12 @@ from flask_api import User, db
 
 # We only need calendar.events scope since we are just managing events in user's calendar
 SCOPES = ['https://www.googleapis.com/auth/calendar.events']
-CLIENT_SECRETS_FILE = "client_secret.json"
+CLIENT_SECRETS_FILE = "../client_secret.json"
 
 class DateTimeEncoder(JSONEncoder):
     """
     Encodes datetime into ISO format.
+    
     Args:
         obj(str): datetime
     
@@ -68,7 +69,8 @@ def logout():
     Returns:
         HTML: Home page.
     """
-    session.pop('username')
+    if 'username' in session:
+        session.pop('username')
     return redirect(url_for("site.home"))
 
 @site.route("/register", methods=["GET", "POST"])
@@ -107,7 +109,7 @@ def login():
         response = requests.post(flask.request.host_url + "/loginUser", json=userLoginData)
         data = json.loads(response.text)
         if data["message"] == "Success":
-            flask.session["username"] = form.username.data
+            session["username"] = form.username.data
             return flask.redirect(flask.url_for("site.dashboard"))
         else:
             flask.flash(data["message"], "danger")
@@ -122,8 +124,7 @@ def dashboard():
     Returns:
         HTML: Dashboard page.
     """
-    if not User.query.filter_by(UserName=flask.session['username']).first().credentials:
-        flask.flash("Google calendar permission not authorised. Redirecting...")
+    if not User.query.filter_by(UserName=session['username']).first().credentials:
         return flask.redirect(flask.url_for('site.authorize'))
     return flask.render_template("dashboard.html", title="Dashboard")
 
@@ -287,7 +288,7 @@ def oauth2callback():
     flow.fetch_token(authorization_response=auth_response)
     creds = flow.credentials
     
-    user = User.query.filter_by(UserName=flask.session['username']).first()
+    user = User.query.filter_by(UserName=session['username']).first()
     user.credentials = credentials_to_dict(creds)
     db.session.commit()
 
@@ -298,10 +299,10 @@ def oauth2callback():
 @site.route("/clear_creds")
 def clear_creds():
     if 'username' in flask.session:
-        user = User.query.filter_by(UserName=flask.session['username']).first()
+        user = User.query.filter_by(UserName=session['username']).first()
         user.credentials = None
         db.session.commit()
-        return jsonify({"success":"Credentials cleared for {user.UserName}"})
+        return jsonify({"success":"Credentials cleared for currently logged in user."})
     else:
         return jsonify({"error":"Not signed in!"})
 

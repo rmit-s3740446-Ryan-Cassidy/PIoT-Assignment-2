@@ -16,3 +16,4 @@ Task-B/config.json
 token.pickle
 credentials.json
 client_secret.json
+*/__pycache__

@@ -11,6 +11,7 @@ Welcome to IOT Car Booking Platform's documentation!
    flask_api
    flask_main
    forms
+   task-b
 
 
 Indices and tables

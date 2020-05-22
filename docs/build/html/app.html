@@ -41,12 +41,13 @@
 <dt id="app.DateTimeEncoder">
 <em class="property">class </em><code class="sig-prename descclassname">app.</code><code class="sig-name descname">DateTimeEncoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">skipkeys</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">ensure_ascii</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">check_circular</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">allow_nan</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">sort_keys</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">indent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">separators</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.DateTimeEncoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">json.encoder.JSONEncoder</span></code></p>
-<p>Encodes datetime into ISO format.
-:param obj: datetime
-:type obj: str</p>
+<p>Encodes datetime into ISO format.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Date and time in ISO format.</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obj</strong> (<em>str</em>) – datetime</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Date and time in ISO format.</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -114,15 +115,9 @@ implement default like this:</p>
 <dl class="py function">
 <dt id="app.booking">
 <code class="sig-prename descclassname">app.</code><code class="sig-name descname">booking</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.booking" title="Permalink to this definition">¶</a></dt>
-<dd><p>Routes user to the booking page.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Booking page.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>HTML</p>
-</dd>
-</dl>
+<dd><p>Routes user to the booking page.
+:returns: Booking page.
+:rtype: HTML</p>
 </dd></dl>
 
 <dl class="py function">
@@ -144,16 +139,15 @@ implement default like this:</p>
 <dl class="py function">
 <dt id="app.bookingsByUser">
 <code class="sig-prename descclassname">app.</code><code class="sig-name descname">bookingsByUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.bookingsByUser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Displays user’s booking history.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Booking by user page.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>HTML</p>
-</dd>
-</dl>
+<dd><p>Displays user’s booking history.
+:returns: Booking by user page.
+:rtype: HTML</p>
 </dd></dl>
+
+<dl class="py function">
+<dt id="app.clear_creds">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">clear_creds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.clear_creds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt id="app.credentials_to_dict">
@@ -176,57 +170,33 @@ implement default like this:</p>
 <dl class="py function">
 <dt id="app.dashboard">
 <code class="sig-prename descclassname">app.</code><code class="sig-name descname">dashboard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.dashboard" title="Permalink to this definition">¶</a></dt>
-<dd><p>Routes user to the dashboard page.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Dashboard page.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>HTML</p>
-</dd>
-</dl>
+<dd><p>Routes user to the dashboard page.
+:returns: Dashboard page.
+:rtype: HTML</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="app.home">
 <code class="sig-prename descclassname">app.</code><code class="sig-name descname">home</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.home" title="Permalink to this definition">¶</a></dt>
-<dd><p>Routes user to the home page.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Home page.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>HTML</p>
-</dd>
-</dl>
+<dd><p>Routes user to the home page.
+:returns: Home page.
+:rtype: HTML</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="app.login">
 <code class="sig-prename descclassname">app.</code><code class="sig-name descname">login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.login" title="Permalink to this definition">¶</a></dt>
-<dd><p>Routes user to the login page.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Login page.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>HTML</p>
-</dd>
-</dl>
+<dd><p>Routes user to the login page.
+:returns: Login page.
+:rtype: HTML</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="app.logout">
 <code class="sig-prename descclassname">app.</code><code class="sig-name descname">logout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.logout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logs user out and ends the session.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Home page.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>HTML</p>
-</dd>
-</dl>
+<dd><p>Logs user out and ends the session.
+:returns: Home page.
+:rtype: HTML</p>
 </dd></dl>
 
 <dl class="py function">
@@ -246,15 +216,9 @@ implement default like this:</p>
 <dl class="py function">
 <dt id="app.register">
 <code class="sig-prename descclassname">app.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.register" title="Permalink to this definition">¶</a></dt>
-<dd><p>Routes user to the registration page.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Registration page.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>HTML</p>
-</dd>
-</dl>
+<dd><p>Routes user to the registration page.
+:returns: Registration page.
+:rtype: HTML</p>
 </dd></dl>
 
 </div>
@@ -286,6 +250,8 @@ implement default like this:</p>
 <li class="toctree-l1"><a class="reference internal" href="flask_api.html">flask_api module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="flask_main.html">flask_main module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">forms module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="task-b.html">agent module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="task-b.html#module-socketioClient">socketioClient module</a></li>
 </ul>
 
 <div class="relations">

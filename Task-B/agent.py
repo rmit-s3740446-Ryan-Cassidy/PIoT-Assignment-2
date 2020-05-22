@@ -1,3 +1,8 @@
+"""
+agent.py
+=====================
+This script is run on agent raspberry pi.
+"""
 import socket
 import json
 import sys
@@ -13,6 +18,15 @@ from PIL import Image
 import socketio
 
 class agentClient:
+    """The agentClient class.
+
+    Attributes:
+        ip(str): IP address of master pi to connect to.
+        car(Car): The car selected by user.
+        username(str): Username of logged in user.
+        geolocateURL(str): Google maps geolocation api url.
+        sioc(obj): socketio object used for communication.
+    """
     def __init__(self):
         self.exit_loop = Event()
         self.sioc = socketio.Client()
@@ -25,8 +39,10 @@ class agentClient:
     login_type = True
     sioc = None
 
-    # Load json configuration
+
     def load_config(self) :
+        """ Loads json config from config.json
+        """
         try:
             with open("config.json") as f:
                 data = json.load(f)
@@ -36,8 +52,10 @@ class agentClient:
             print(str(e))
             sys.exit("Error when reading from Json.")
 
-    # Clear console
+
     def clear(self) :
+        """Clears console so that console is clean initially.
+        """
         # for windows 
         if name == 'nt': 
             _ = system('cls') 
@@ -46,12 +64,19 @@ class agentClient:
         else: 
             _ = system('clear') 
 
-    # Socket to Master
+
     def connect(self) : 
+        """Initialize socket connection to master pi.
+        """
         self.sioc.connect(self.ip)
 
     # Convert image to base64 string
     def image_to_str(self) :
+        """Convert image to base64 encoded string.
+
+        Returns:
+            str: base64 encoded image
+        """
         with open("image.jpg", "rb") as image:
             b64str = base64.b64encode(image.read())
             return b64str
@@ -59,6 +84,8 @@ class agentClient:
 
     # Prompt user for login type
     def login(self) :
+        """Display user menu on console.
+        """
         self.clear()
         print("Welcome to Agent Car Login")
         print("1. User Credential Login")
@@ -94,6 +121,13 @@ class agentClient:
             self.sioc.emit('reset', callback = self.login)
 
     def loginresp(self, auth, username, cars) :
+        """Process login response
+
+        Args:
+            auth (str): Authorization message returned.
+            username (str): username of user who logged in.
+            cars (list): list of cars booked by the user.
+        """
         car_list = cars
         # If true, sign in, else redirect back to login
         if auth == 'Success' :
@@ -117,7 +151,15 @@ class agentClient:
             self.sioc.emit('reset', callback = self.login)
 
     def select_car(self, car_list) :
-        # User selects booked car from list
+        """Display car list from booking history to unlock a car.
+
+        Args:
+            car_list (list): list of cars in bookings by user
+
+        Raises:
+            ValueError: On invalid option selection.
+        """
+
         try :
             for index, car in enumerate(car_list, start=1):
                 print(index, ". " + car["Make"] + ' | ' + car["Type"])
@@ -136,12 +178,16 @@ class agentClient:
             print("Not a valid selection")
             self.select_car(car_list)
 
-    #Method for looping until user presses enter
+
     def wait_for_user_input(self) :
+        """Accept input from user until they press "Enter"
+        """
         input()
         self.exit_loop.set()
 
     def location_update(self) :
+        """Return booked car.
+        """
         # Prompt user to do something to logout
         print("Press enter to return car")
         th.Thread(target=self.wait_for_user_input, args=(), name='wait_for_user_input', daemon=True).start()
