@@ -12,3 +12,6 @@ PIoT-Assignment-2<br>
 
 ### To run and work on Task-A :
 `cd Task-A` & `python3 app.py`
+
+## To generate docs:
+`cd docs` and then `make clean html`
