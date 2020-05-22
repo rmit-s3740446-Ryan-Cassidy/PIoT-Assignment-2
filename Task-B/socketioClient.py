@@ -1,6 +1,13 @@
+"""
+socketioClient.py
+======================
+The socketio client class.
+"""
 import socketio
 
 class socketClient:
+    """Class to register socket events and print appropriate message to console.
+    """
     sioc = socketio.Client()
 
     # Socket Events
