@@ -1,3 +1,8 @@
+"""
+Socketio server for Master Pi (MP). Client Agent Pi's (AP) will connect to this server.
+We register different events here.
+"""
+
 from flask_socketio import SocketIO, send, emit
 from flask import request
 import time
@@ -14,6 +19,14 @@ def handle_reset():
 #User credential authentication event
 @sios.on('usercredauth')
 def handle_usercred(message):
+    """Handles user authentication for command line interface mode.
+
+    Args:
+        message (str): Message from AP containing username and password.
+
+    Returns:
+        tuple: (str: Success/Fail, str: username, list: cars)
+    """
     cars = []
     print('received user cred auth: ')
     print(message)
@@ -30,6 +43,14 @@ def handle_usercred(message):
 #Face recognition event
 @sios.on('facerecauth')
 def handle_facerec(message):
+    """Handles user authentication via face recognition.
+
+    Args:
+        message (str): username for faceauth.
+
+    Returns:
+        tuple: (str: Success/Fail, str: usrname, list: cars)
+    """
     cars = []
     print('recieved face recognition auth')
     names = recognize(message)
@@ -45,6 +66,11 @@ def handle_facerec(message):
 #Update Car status event
 @sios.on('carupdatestatus')
 def handle_carupdatestatus(message):
+    """Update car status.
+
+    Args:
+        message (str): id and status of car.
+    """
     print('received updated car status')
     statusjson = {'id': message[0], 'status': message[1]}
     requests.post(request.host_url + "/updatecarstatus", json=statusjson)
@@ -52,6 +78,11 @@ def handle_carupdatestatus(message):
 #Update Car location event
 @sios.on('carupdatelocation')
 def handle_carupdatelocation(message):
+    """Update car location status.
+
+    Args:
+        message (str): id and status of car whose location needs updating.
+    """
     print('received updated car location')
     locationjson = {'id': message[0], 'location': message[1]}
     requests.post(request.host_url + "/updatecarlocation", json=locationjson)

@@ -73,10 +73,26 @@ class DatabaseUtils:
                 constraint PK_Car primary key (LoginID)
                 )"""
             )
-            # location = '{"location": {"lat": -33.91747, "lng": 151.22912}, "accuracy": 2312}'
-            # locationOne = '{"location": {"lat": -33.91910, "lng": 151.22907}, "accuracy": 2312}'
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','"+location+"','Red','6','10','Available')")
-            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','"+locationOne+"','Blue','7','10','Available')")
+            # location = '{"location": {"lat": -37.810021, "lng": 144.963001}, "accuracy": 2312}'
+            # locationOne = '{"location": {"lat": -37.808016, "lng": 144.960125}, "accuracy": 2312}'
+            # locationTwo = '{"location": {"lat": -37.798249, "lng": 144.953120}, "accuracy": 2312}'
+            # locationThree = '{"location": {"lat": -37.803272, "lng": 144.951275}, "accuracy": 2312}'
+            # locationFour = '{"location": {"lat": -37.799966, "lng": 144.957605}, "accuracy": 2312}'
+            # locationFive = '{"location": {"lat": -37.793078, "lng": 144.976059}, "accuracy": 2312}'
+            # locationSix = '{"location": {"lat": -37.817555, "lng": 144.989964}, "accuracy": 2312}'
+            # locationSeven = '{"location": {"lat": -37.819449, "lng": 144.960224}, "accuracy": 2312}'
+            # locationEight = '{"location": {"lat": -37.832392, "lng": 144.937795}, "accuracy": 2312}'
+            # locationNine = '{"location": {"lat": -37.826083, "lng": 144.892047}, "accuracy": 2312}'
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','"+location+"','Blue','7','20','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Alto','Sedan','"+locationOne+"','Red','8','10','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','"+locationTwo+"','Red','9','20','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Civic','Sedan','"+locationThree+"','Black','6','20','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','"+locationFour+"','Red','7','20','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Mercedes','Sedan','"+locationFive+"','Blue','8','10','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Honda','Sedan','"+locationSix+"','Red','9','10','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Civic','Sedan','"+locationSeven+"','Black','6','10','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Mercedes','Sedan','"+locationEight+"','Red','7','20','Available')")
+            # cursor.execute("insert into Car (Make,Type,Location,Color,Seats,CostPerHour,Status) values ('Alto','Sedan','"+locationNine+"','Blue','6','10','Available')")
             # cursor.execute("drop table if exists Booking")
             cursor.execute(
                 """
