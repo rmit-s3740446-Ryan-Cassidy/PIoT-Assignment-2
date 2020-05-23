@@ -109,7 +109,7 @@
         function initMap() {
           map = new google.maps.Map(
               document.getElementById('map'),
-              {center: new google.maps.LatLng(-33.91722, 151.23064), zoom: 16});
+              {center: new google.maps.LatLng(-37.810021,144.963001), zoom: 14});
           var features = [];
           var InfoObj = []; 
           for(var i = 0; i<=lats.length-1;i++){
@@ -117,17 +117,9 @@
               position: new google.maps.LatLng(lats[i], lngs[i])
             })
           }
-          function closeOtherInfo(){
-          if(InfoObj[0].length >0){
-            InfoObj[0].set("marker",null);
-          InfoObj[0].close;
-          InfoObj[0].length = 0;
-          }
-          
-        }
         // Create markers.
         for (var i = 0; i < features.length; i++) {
-          var marker = new google.maps.Marker({
+          const marker = new google.maps.Marker({
             position: features[i].position,
             map: map
           });
@@ -144,20 +136,20 @@
             '</p>'+
             '</div>'+
             '</div>';
-          const infowindow = new google.maps.InfoWindow({
+          const infoWindow = new google.maps.InfoWindow({
             content: contentString
           });
           marker.addListener('click', function() {
-            if(InfoObj.length >0){
+            if(InfoObj.length > 0){
             InfoObj[0].set("marker",null);
             InfoObj[0].close;
             InfoObj[0].length = 0;
           }
-          infowindow.open(marker.get('map'), marker);
-          InfoObj[0] = infowindow;
+            infoWindow.open(map, marker);
+            InfoObj[0] = infoWindow;
           });
-          };
-        }
+        };
+      }
       </script>
       <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmNtHGGvNZ4JUMGs9nqz8w81DL1Xnzctw&callback=initMap">
