@@ -35,12 +35,12 @@ class LoginForm(FlaskForm):
 class CarsFilterForm(FlaskForm):
     make = SelectField(
         u'Filter by Make:',
-        choices = [('All makes', 'All makes'),('Honda', 'Honda'), ('Civic', 'Civic')], default='All makes'
+        choices = [('All makes', 'All makes'),('Honda', 'Honda'), ('Civic', 'Civic'), ('Alto', 'Alto'), ('Mercedes', 'Mercedes')], default='All makes'
         
     )
     seats = SelectField(
         u'Filter By Seats:',
-        choices = [('All seats', 'All seats'),('6', '6'), ('7', '7')], default='All seats'
+        choices = [('All seats', 'All seats'),('6', '6'), ('7', '7'), ('8', '8'), ('9', '9')], default='All seats'
         
     )
     price = SelectField(
@@ -49,6 +49,7 @@ class CarsFilterForm(FlaskForm):
         
     )
     submit = SubmitField("Filter")
+
 
 
 class BookingForm(FlaskForm):
