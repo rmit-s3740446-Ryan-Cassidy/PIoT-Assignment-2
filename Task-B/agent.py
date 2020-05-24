@@ -174,7 +174,7 @@ class agentClient:
                 self.sioc.emit('carupdatestatus', [car['CarID'], 'Rented'], callback = self.location_update)
             else:
                 raise ValueError
-        except ValueError:
+        except (ValueError, IndexError) as e:
             print("Not a valid selection")
             self.select_car(car_list)
 
