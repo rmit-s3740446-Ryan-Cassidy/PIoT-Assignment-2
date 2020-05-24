@@ -4,7 +4,7 @@
 
 Ryan Cassidy (s3740446) - Worked on Task-B and C (agent.py, socketing between Pi's, facial recognition, Trello Board, Unit Testing)
 
-Vineet Bugtani (3734938) - Worked on Task-A (API, Site, Google Cloud Database, Unit Testing, Trello Board, Google Maps)
+Vineet Bugtani (s3734938) - Worked on Task-A (API, Site, Google Cloud Database, Unit Testing, Trello Board, Google Maps)
 
 Akshay Sunil Salunke (s3730440) - Worked on Task-A and B (API, Site, Google Calendar, Trello Board, Sphinx Documentation)
 
