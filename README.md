@@ -27,7 +27,7 @@ Agent uses google geolocation API to lookup location through IP address, config.
 
 Both applications can be run on different Pi's and communicate.
 
-Task-C Facial recognition is implemented in both Task-A and Task-B applications.
+Task-C Facial recognition is implemented in both Task-A and Task-B applications. Place a picture of yourself in Task-B and name it image.jpg to use it for facial recognition. Other image is for unit testing.
 
 Unit Testing is found in the unittests.py file in both folders. Make sure to adjust the ip strings to the server ip.
 
