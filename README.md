@@ -1,5 +1,6 @@
 # PIoT-Assignment-2
-PIoT-Assignment-2<br>
+
+##Team Members
 
 Ryan Cassidy (s3740446) - Worked on Task-B and C (agent.py, socketing between Pi's, facial recognition, Trello Board, Unit Testing)
 
