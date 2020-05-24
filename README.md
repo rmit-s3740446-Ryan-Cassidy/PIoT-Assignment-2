@@ -27,6 +27,10 @@ Agent uses google geolocation API to lookup location through IP address, config.
 
 Both applications can be run on different Pi's and communicate.
 
+Task-C Facial recognition is implemented in both Task-A and Task-B applications.
+
+Unit Testing is found in the unittests.py file in both folders. Make sure to adjust the ip strings to the server ip.
+
 Trello Board: https://trello.com/b/j2XWnnbK/programming-iot-assignment-2
 
 **Run below commands in a terminal in MacOS**
@@ -50,3 +54,9 @@ Trello Board: https://trello.com/b/j2XWnnbK/programming-iot-assignment-2
 
 ## To view docs:
 `Navigate to index.html in docs/build/html`
+
+## To run unit tests for Task-A
+`Run the Task-A server and in a separate shell run python3 Task-A/unittests.py`
+
+## To run unit tests for Task-B
+`Run the Task-A server and in a seperate shell run python3 Task-B/unitests.py`
