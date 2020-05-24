@@ -1,16 +1,23 @@
 # PIoT-Assignment-2
 PIoT-Assignment-2<br>
-By
+
 Ryan Cassidy (s3740446) - Worked on Task-B and C (agent.py, socketing between Pi's, facial recognition, Trello Board, Unit Testing)
+
 Vineet Bugtani (3734938) - Worked on Task-A (API, Site, Google Cloud Database, Unit Testing, Trello Board, Google Maps)
+
 Akshay Sunil Salunke (s3730440) - Worked on Task-A and B (API, Site, Google Calendar, Trello Board, Sphinx Documentation)
+
 Pui Ling Chan (s3561165) - Worked on Task-A (API, Site, Google Cloud Database, Sphinx Documentation, Trello Board)
 
 Group assignment 2 for RMIT Programming Internet of Things 2020
 Features a flask website for renting cars and a python agent script for socketing to Master Pi and unlocking cars.
+
 In order for site to operate correctly the host address must be raspberry.localpi.com:5000 in order to utilize google calendar's redirect-uri. This may require some configuration in the host file in order to work in a local environment (add the ip you are hosting the site on or the loopback address followed by raspberry.localpi.com)
+
 Site utilizes google maps, google calendar and a google cloud database. For configs and keys to these please ask above team members.
+
 Flask-socketio is used to provide socketing through gevent-websocket to the agent, agent utilizes python-socketio to socket with site.
+
 Agent uses google geolocation API to lookup location through IP address, config.json with api key required in order to use.
 
 Both applications can be run on different Pi's and communicate.
