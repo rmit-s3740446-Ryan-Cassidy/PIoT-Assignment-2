@@ -15,6 +15,8 @@ Pui Ling Chan (s3561165) - Worked on Task-A (API, Site, Google Cloud Database, S
 Group assignment 2 for RMIT Programming Internet of Things 2020
 Features a flask website for renting cars and a python agent script for socketing to Master Pi and unlocking cars.
 
+A database schema for the cloud database can be seen in the root directory of this repo.
+
 In order for site to operate correctly the host address must be raspberry.localpi.com:5000 in order to utilize google calendar's redirect-uri. This may require some configuration in the host file in order to work in a local environment (add the ip you are hosting the site on or the loopback address followed by raspberry.localpi.com)
 
 Site utilizes google maps, google calendar and a google cloud database. For configs and keys to these please ask above team members.
